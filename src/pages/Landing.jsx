@@ -1,16 +1,14 @@
 import React from 'react';
-import logo from '../assets/images/logo.png';
-import logo2 from '../assets/images/logo2.png';
-import logoWhiteBg from '../assets/images/logo-removebg.png';
-import main from '../assets/images/main.jpg';
+import main from '../assets/images/main.svg';
 import styled from 'styled-components';
+import { Logo } from '../components';
+import { Link } from 'react-router-dom';
 
 const Landing = () => {
   return (
     <Wrapper>
       <nav>
-        <h1 className='logo'>SOLO</h1>
-        {/* <img src={logo2} alt='solo logo' className='logo' /> */}
+        <Logo />
       </nav>
       <div className='container page'>
         <div className='info'>
@@ -23,7 +21,9 @@ const Landing = () => {
             quos, commodi dignissimos deserunt veritatis illo rerum officiis
             quisquam, odio neque. Quis.
           </p>
-          <button className='btn btn-hero'>Login/Register</button>
+          <Link to='/register' className='btn btn-hero'>
+            Login/Register
+          </Link>
         </div>
         <img src={main} alt='friendship hands' className='img main-img' />
       </div>
@@ -39,22 +39,18 @@ const Wrapper = styled.main`
     height: var(--nav-height);
     display: flex;
     align-items: center;
-    h1 {
-      color: var(--orange-900);
-      font-size: 4rem;
-      letter-spacing: 0.3em;
-    }
+  }
+  .logo {
   }
   .page {
     min-height: calc(100vh -var(--nav-height));
     display: grid;
     align-items: center;
-    margin-top: -3rem;
+    margin-top: 5rem;
   }
   h1 {
     font-weight: 700;
     color: var(--primary-50);
-    padding-top: 50px;
     span {
       color: var(--orange-900);
       font-weight: bolder;
@@ -62,7 +58,6 @@ const Wrapper = styled.main`
   }
   p {
     color: var(--primary-50);
-    text-justify: inter-word;
   }
   .main-img {
     display: none;
