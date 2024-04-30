@@ -2,11 +2,15 @@ import { useState, useEffect } from 'react';
 import { FormRow, Logo } from '../components';
 import styled from 'styled-components';
 import { toast } from 'react-toastify';
+import { useLocation, useNavigate } from 'react-router';
+import loginService from '../services/login-service';
+import { useAuth } from '../contexts/auth';
+import userService from '../services/user-service';
 
 const initialState = {
   email: '',
   password: '',
-  confirmPassword: '',
+  matchingPassword: '',
   givenName: '',
   surname: '',
   country: '',
@@ -16,6 +20,9 @@ const initialState = {
 };
 
 const Register = () => {
+  const { setToken, setRefreshToken } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
   const [values, setValues] = useState(initialState);
 
   const handleChange = (e) => {
@@ -32,7 +39,7 @@ const Register = () => {
       surname,
       email,
       password,
-      confirmPassword,
+      matchingPassword,
       country,
       city,
       isMember,
@@ -43,11 +50,45 @@ const Register = () => {
       !password ||
       (!isMember && !givenName) ||
       (!isMember && !surname) ||
-      (!isMember && !confirmPassword) ||
+      (!isMember && !matchingPassword) ||
       (!isMember && !country) ||
       (!isMember && !city)
     ) {
       toast.error('Please fill out all the fields.');
+      return;
+    }
+
+    {
+      isMember
+        ? userService
+            .doLogin(email, password)
+            .then((res) => {
+              console.log('res', res);
+              const { token, refreshToken } = res.data;
+              setToken(token);
+              setRefreshToken(refreshToken);
+              navigate('/', { replace: true });
+            })
+            .catch((error) => {
+              toast.error('Invalid login');
+            })
+        : userService
+            .save(
+              givenName,
+              surname,
+              email,
+              password,
+              matchingPassword,
+              country,
+              city
+            )
+            .then((res) => {
+              toast.info('yes');
+              navigate('/', { replace: true });
+            })
+            .catch((error) => {
+              toast.error(error.response.data.message);
+            });
     }
   };
 
@@ -95,8 +136,8 @@ const Register = () => {
           {!values.isMember && (
             <FormRow
               type='password'
-              name='confirmPassword'
-              value={values.confirmPassword}
+              name='matchingPassword'
+              value={values.matchingPassword}
               handleChange={handleChange}
               labelText='Confirm Password'
             />
