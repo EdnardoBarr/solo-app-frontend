@@ -6,6 +6,7 @@ import { useLocation, useNavigate } from 'react-router';
 import loginService from '../services/login-service';
 import { useAuth } from '../contexts/auth';
 import userService from '../services/user-service';
+import localStorageService from '../services/localStorage-service';
 
 const initialState = {
   email: '',
@@ -20,7 +21,7 @@ const initialState = {
 };
 
 const Register = () => {
-  const { setToken, setRefreshToken } = useAuth();
+  const { token, setToken, setRefreshToken } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const [values, setValues] = useState(initialState);
@@ -58,6 +59,11 @@ const Register = () => {
       return;
     }
 
+    if (!isMember && password !== matchingPassword) {
+      toast.error('Passwords must match');
+      return;
+    }
+
     {
       isMember
         ? userService
@@ -83,7 +89,7 @@ const Register = () => {
               city
             )
             .then((res) => {
-              toast.info('yes');
+              toast.success('YES');
               navigate('/', { replace: true });
             })
             .catch((error) => {
@@ -95,6 +101,15 @@ const Register = () => {
   const toggleMember = () => {
     setValues({ ...values, isMember: !values.isMember });
   };
+
+  useEffect(() => {
+    if (token) {
+      setTimeout(() => {
+        navigate('/');
+      }, 2000);
+    }
+  }, [token]);
+
   return (
     <Wrapper className='full-page'>
       <form className='form' onSubmit={onSubmit}>
