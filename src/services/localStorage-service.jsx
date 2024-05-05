@@ -1,5 +1,3 @@
-import httpCommon from '../http-common';
-
 class LocalStorageServic {
   addUserToLocalStorage(user) {
     localStorage.setItem('user', JSON.stringify(user));

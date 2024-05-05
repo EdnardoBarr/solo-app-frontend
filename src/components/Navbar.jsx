@@ -9,8 +9,9 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/auth';
 import loginService from '../services/login-service';
 import { toast } from 'react-toastify';
+import userService from '../services/user-service';
 
-const Navbar = () => {
+const Navbar = ({ isSidebarOpen, setIsSidebarOpen }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const { setToken } = useAuth();
 
@@ -25,13 +26,14 @@ const Navbar = () => {
       .catch((error) => {
         toast.error('Error logging out');
       });
-    //  setToken(null);
-    // navigate('/landing');
   };
   return (
     <Wrapper>
       <div className='nav-center'>
-        <button className='toggle-btn'>
+        <button
+          className='toggle-btn'
+          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+        >
           <FaAlignLeft />
         </button>
         <div>

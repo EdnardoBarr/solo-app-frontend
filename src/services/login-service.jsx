@@ -5,8 +5,8 @@ class LoginService {
     return httpCommon.post('/user/login', { email, password });
   }
 
-  doLogout(id) {
-    return httpCommon.post('/user/logout', { id });
+  doLogout() {
+    return httpCommon.post('/user/logout');
   }
 }
 

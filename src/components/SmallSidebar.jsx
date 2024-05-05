@@ -1,7 +1,31 @@
+import { FaTimes } from 'react-icons/fa';
 import styled from 'styled-components';
+import Logo from './Logo';
+import NavLinks from './NavLinks';
 
-const SmallSidebar = () => {
-  return <Wrapper>Small Sidebar</Wrapper>;
+const SmallSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+  return (
+    <Wrapper>
+      <div
+        className={
+          isSidebarOpen ? 'sidebar-container show-sidebar' : 'sidebar-container'
+        }
+      >
+        <div className='content'>
+          <button className='close-btn' onClick={toggleSidebar}>
+            <FaTimes />
+          </button>
+          <header>
+            <Logo />
+          </header>
+          <NavLinks toggleSidebar={toggleSidebar} />
+        </div>
+      </div>
+    </Wrapper>
+  );
 };
 
 const Wrapper = styled.aside`
@@ -41,8 +65,17 @@ const Wrapper = styled.aside`
     background: transparent;
     border-color: transparent;
     font-size: 2rem;
-    color: var(--red-dark);
+    color: var(--grey-400);
     cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .close-btn:hover {
+    color: var(--grey-900);
+    background-color: var(--grey-100);
+    transition: var(--transition);
+    border-radius: 30px;
   }
   .nav-links {
     padding-top: 2rem;

@@ -1,15 +1,26 @@
 import { Outlet } from 'react-router-dom';
 import { BigSidebar, Navbar, SmallSidebar } from '../../components';
 import styled from 'styled-components';
+import { useState } from 'react';
 
 const SharedLayout = () => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   return (
     <Wrapper>
       <main className='dashboard'>
-        <SmallSidebar />
-        <BigSidebar />
+        <SmallSidebar
+          isSidebarOpen={isSidebarOpen}
+          setIsSidebarOpen={setIsSidebarOpen}
+        />
+        <BigSidebar
+          isSidebarOpen={isSidebarOpen}
+          setIsSidebarOpen={setIsSidebarOpen}
+        />
         <div>
-          <Navbar />
+          <Navbar
+            isSidebarOpen={isSidebarOpen}
+            setIsSidebarOpen={setIsSidebarOpen}
+          />
           <div className='dashboard-page'>
             <Outlet />
           </div>

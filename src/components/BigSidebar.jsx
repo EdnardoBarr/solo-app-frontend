@@ -1,7 +1,24 @@
 import styled from 'styled-components';
+import NavLinks from './NavLinks';
+import Logo from './Logo';
 
-const BigSidebar = () => {
-  return <Wrapper>Big Sidebar</Wrapper>;
+const BigSidebar = ({ isSidebarOpen, setisSidebarOpen }) => {
+  return (
+    <Wrapper>
+      <div
+        className={
+          isSidebarOpen ? 'sidebar-container show-sidebar' : 'sidebar-container'
+        }
+      >
+        <div className='content'>
+          <header>
+            <Logo />
+          </header>
+          <NavLinks />
+        </div>
+      </div>
+    </Wrapper>
+  );
 };
 
 const Wrapper = styled.aside`
