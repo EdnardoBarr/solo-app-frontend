@@ -5,8 +5,12 @@ class UserService {
     return httpCommon.get('/user/logged');
   }
 
-  getUserInfo(email) {
-    return httpCommon.post('/user/info', { email });
+  getUserByEmail(email) {
+    return httpCommon.get(`/user/retrieve/${email}`);
+  }
+
+  getUserById(id) {
+    return httpCommon.get(`/user/${id}`);
   }
 
   doLogin(email, password) {

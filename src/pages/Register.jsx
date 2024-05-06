@@ -102,13 +102,13 @@ const Register = () => {
     setValues({ ...values, isMember: !values.isMember });
   };
 
-  // useEffect(() => {
-  //   if (token) {
-  //     setTimeout(() => {
-  //       navigate('/');
-  //     }, 2000);
-  //   }
-  // }, [token]);
+  useEffect(() => {
+    if (token) {
+      setTimeout(() => {
+        navigate('/');
+      }, 2000);
+    }
+  }, [token]);
 
   return (
     <Wrapper className='full-page'>
