@@ -8,6 +8,10 @@ class LoginService {
   doLogout() {
     return httpCommon.post('/user/logout');
   }
+
+  // verifyTokenExpiration() {
+  //   return httpCommon.
+  // }
 }
 
 export default new LoginService();

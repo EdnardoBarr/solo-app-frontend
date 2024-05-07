@@ -18,7 +18,7 @@ class UserService {
   }
 
   save(givenName, surname, email, password, matchingPassword, country, city) {
-    return httpCommon.post('/user/registration', {
+    return httpCommon.post('/user/register', {
       givenName,
       surname,
       email,
@@ -26,6 +26,18 @@ class UserService {
       matchingPassword,
       country,
       city,
+    });
+  }
+
+  update(id, givenName, surname, email, country, city, dateOfBirth, bio) {
+    return httpCommon.put(`/user/update/${id}`, {
+      givenName,
+      surname,
+      email,
+      country,
+      city,
+      dateOfBirth,
+      bio,
     });
   }
 }

@@ -74,6 +74,7 @@ const Register = () => {
               setToken(token);
               setRefreshToken(refreshToken);
               navigate('/', { replace: true });
+              toast.success(`Good to see you again!`);
             })
             .catch((error) => {
               toast.error('Invalid login');
@@ -89,7 +90,7 @@ const Register = () => {
               city
             )
             .then((res) => {
-              toast.success('YES');
+              toast.success(`Welcome to SOLO, ${givenName}`);
               navigate('/', { replace: true });
             })
             .catch((error) => {
@@ -104,9 +105,7 @@ const Register = () => {
 
   useEffect(() => {
     if (token) {
-      setTimeout(() => {
-        navigate('/');
-      }, 2000);
+      navigate('/');
     }
   }, [token]);
 

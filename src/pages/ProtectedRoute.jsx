@@ -11,6 +11,7 @@ const ProtectedRoute = ({ children }) => {
 
   useEffect(() => {
     if (!authenticated) {
+      console.log('aaa');
       userService
         .getLoggedUserEmail()
         .then((res) => setUserDetails(res.data))
@@ -19,6 +20,7 @@ const ProtectedRoute = ({ children }) => {
             setUserDetails(null);
             if (token) setToken(null);
           }
+          navigate('/landing');
         });
     }
   }, [authenticated]);
@@ -39,9 +41,13 @@ const ProtectedRoute = ({ children }) => {
     window.addEventListener('storage', onStorageTokenChange);
   }, []);
 
-  if (!authenticated) {
-    return navigate('/landing');
-  }
+  // useEffect(() => {
+
+  // })
+
+  // if (!authenticated) {
+  //   return navigate('/landing');
+  //  }
   return children;
 };
 

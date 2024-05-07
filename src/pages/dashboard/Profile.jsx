@@ -22,13 +22,20 @@ const Profile = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const { givenName, surname, email, country, city, dateOfbirth, bio } =
+    const { id, givenName, surname, email, country, city, dateOfBirth, bio } =
       userData;
+    console.log('userData', userData);
 
-    if (!givenName || !surname || !email || country || city) {
+    if (!givenName || !surname || !email || !country || !city) {
       toast.error('Please fill out all required fields');
       return;
     }
+    userService
+      .update(id, givenName, surname, email, country, city, dateOfBirth, bio)
+      .then((res) => toast.success('User has been updated'))
+      .catch((error) =>
+        toast.error(error?.response?.data.message || 'Unable to update user')
+      );
   };
 
   const handleChange = (e) => {
@@ -40,7 +47,6 @@ const Profile = () => {
 
   useEffect(() => {
     const username = userDetails?.username || '';
-    console.log('username ', username);
     function retrieveUserData() {
       userService
         .getUserByEmail(username)
@@ -65,35 +71,35 @@ const Profile = () => {
           <FormRow
             type='text'
             name='givenName'
-            labelText='name'
+            labelText='name *'
             value={userData.givenName}
             handleChange={handleChange}
           />
           <FormRow
             type='text'
             name='surname'
-            labelText='surname'
+            labelText='surname *'
             value={userData.surname}
             handleChange={handleChange}
           />
           <FormRow
             type='text'
             name='email'
-            labelText='email'
+            labelText='email *'
             value={userData.email}
             handleChange={handleChange}
           />
           <FormRow
             type='text'
             name='country'
-            labelText='country'
+            labelText='country *'
             value={userData.country}
             handleChange={handleChange}
           />
           <FormRow
             type='text'
             name='city'
-            labelText='city'
+            labelText='city *'
             value={userData.city}
             handleChange={handleChange}
           />

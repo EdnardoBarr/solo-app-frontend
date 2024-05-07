@@ -14,7 +14,7 @@ const client = axios.create({
 const refreshTokenReq = () => {
   const refreshToken = localStorage.getItem('refresh-token');
   return refreshToken
-    ? client.post('/refresh-token', { refreshToken })
+    ? client.post('/user/refresh-token', { refreshToken })
     : Promise.reject();
 };
 
