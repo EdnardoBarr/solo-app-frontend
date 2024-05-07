@@ -50,7 +50,7 @@ client.interceptors.response.use(
         if (error.response.status === 403) {
           localStorage.removeItem('token');
           localStorage.removeItem('refresh-token');
-          window.location.href = '/';
+          window.location.href = '/landing';
         }
 
         // Handle refresh token error or redirect to login

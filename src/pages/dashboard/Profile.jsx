@@ -1,30 +1,30 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useReducer, useState } from 'react';
 import styled from 'styled-components';
 import { useLoading } from '../../contexts/loading';
 import { toast } from 'react-toastify';
 import { FormRow } from '../../components';
 import userService from '../../services/user-service';
-import { UserContext } from '../../contexts/user';
+import { UserContext, UserDispatchContext } from '../../contexts/user';
 import { Loading } from '../../components/Loading';
 
 const Profile = () => {
   const { userDetails } = useContext(UserContext);
+  const { setUserDetails } = useContext(UserDispatchContext) || {};
   const { isLoading, setIsLoading } = useLoading();
   const [userData, setUserData] = useState({
-    // givenName: user?.givenName || '',
-    // surname: user?.surname || '',
-    // email: user?.email || '',
-    // country: user?.country || '',
-    // city: user?.city || '',
-    // dateOfbirth: user?.dateOfbirth || '',
-    // bio: user?.bio || '',
+    givenName: userDetails?.givenName || '',
+    surname: userDetails?.surname || '',
+    email: userDetails?.email || '',
+    country: userDetails?.country || '',
+    city: userDetails?.city || '',
+    dateOfBirth: userDetails?.dateOfBirth || '',
+    bio: userDetails?.bio || '',
   });
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const { id, givenName, surname, email, country, city, dateOfBirth, bio } =
       userData;
-    console.log('userData', userData);
 
     if (!givenName || !surname || !email || !country || !city) {
       toast.error('Please fill out all required fields');
@@ -32,7 +32,10 @@ const Profile = () => {
     }
     userService
       .update(id, givenName, surname, email, country, city, dateOfBirth, bio)
-      .then((res) => toast.success('User has been updated'))
+      .then((res) => {
+        setUserDetails(null);
+        toast.success('User has been updated');
+      })
       .catch((error) =>
         toast.error(error?.response?.data.message || 'Unable to update user')
       );
@@ -46,20 +49,25 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    const username = userDetails?.username || '';
-    function retrieveUserData() {
+    const username = userDetails?.username;
+    if (username) {
+      // function retrieveUserData() {
       userService
         .getUserByEmail(username)
         .then((res) => {
-          setIsLoading(true);
+          // setIsLoading(true);
           setUserData(res?.data || {});
-          setIsLoading(false);
+          // setIsLoading(false);
         })
         .catch((err) => toast.error('User not found'));
       // .finally(() => setIsLoading(true));
+
+      // }
+      // retrieveUserData();
+    } else {
+      setUserData({});
     }
-    retrieveUserData();
-  }, []);
+  }, [userDetails?.username]);
 
   return isLoading ? (
     <Loading />
@@ -68,55 +76,67 @@ const Profile = () => {
       <form onSubmit={handleSubmit} className='form'>
         <h3>Profile</h3>
         <div className='form-center'>
-          <FormRow
-            type='text'
-            name='givenName'
-            labelText='name *'
-            value={userData.givenName}
-            handleChange={handleChange}
-          />
-          <FormRow
-            type='text'
-            name='surname'
-            labelText='surname *'
-            value={userData.surname}
-            handleChange={handleChange}
-          />
-          <FormRow
-            type='text'
-            name='email'
-            labelText='email *'
-            value={userData.email}
-            handleChange={handleChange}
-          />
-          <FormRow
-            type='text'
-            name='country'
-            labelText='country *'
-            value={userData.country}
-            handleChange={handleChange}
-          />
-          <FormRow
-            type='text'
-            name='city'
-            labelText='city *'
-            value={userData.city}
-            handleChange={handleChange}
-          />
-          <FormRow
-            type='text'
-            name='dateOfBirth'
-            labelText='birth'
-            value={userData.dateOfbirth}
-            handleChange={handleChange}
-          />
-          <FormRow
-            type='text'
-            name='bio'
-            labelText='bio'
-            value={userData.bio}
-            handleChange={handleChange}
-          />
+          <div className='container-row'>
+            <FormRow
+              type='text'
+              name='givenName'
+              labelText='name *'
+              value={userData?.givenName || ''}
+              handleChange={handleChange}
+            />
+            <FormRow
+              type='text'
+              name='surname'
+              labelText='surname *'
+              value={userData?.surname || ''}
+              handleChange={handleChange}
+            />
+          </div>
+          <div className='container-row'>
+            <FormRow
+              type='text'
+              name='email'
+              labelText='email *'
+              value={userData?.email || ''}
+              handleChange={handleChange}
+            />
+            <FormRow
+              type='text'
+              name='dateOfBirth'
+              labelText='date of birth'
+              value={userData?.dateOfBirth || ''}
+              handleChange={handleChange}
+            />
+          </div>
+          <div className='container-row'>
+            <FormRow
+              type='text'
+              name='country'
+              labelText='country *'
+              value={userData?.country || ''}
+              handleChange={handleChange}
+            />
+            <FormRow
+              type='text'
+              name='city'
+              labelText='city *'
+              value={userData?.city || ''}
+              handleChange={handleChange}
+            />
+          </div>
+          <div className='form-row'>
+            <label htmlFor='' className='form-label'>
+              Bio
+            </label>
+            <textarea
+              type='text'
+              rows='4'
+              name='bio'
+              value={userData?.bio || ''}
+              onChange={handleChange}
+              className='form-textarea'
+            />
+          </div>
           <button className='btn btn-block' type='submit'>
             save
           </button>
@@ -143,11 +163,18 @@ const Wrapper = styled.section`
     max-width: 100%;
     width: 100%;
   }
+  .container-row {
+    width: 100%;
+    display: flex;
+    gap: 10px;
+  }
   .form-row {
     margin-bottom: 0;
+    width: 100%;
   }
   .form-center {
-    display: grid;
+    display: flex;
+    flex-direction: column;
     row-gap: 0.5rem;
   }
   .form-center button {
@@ -171,6 +198,7 @@ const Wrapper = styled.section`
   .clear-btn:hover {
     background: var(--black);
   }
+
   @media (min-width: 992px) {
     .form-center {
       grid-template-columns: 1fr 1fr;

@@ -90,8 +90,9 @@ const Register = () => {
               city
             )
             .then((res) => {
-              toast.success(`Welcome to SOLO, ${givenName}`);
-              navigate('/', { replace: true });
+              toast.success(`Registered succesfully. Please Login`);
+              toggleMember();
+              navigate('/register', { replace: true });
             })
             .catch((error) => {
               toast.error(error.response.data.message);
@@ -183,7 +184,7 @@ const Register = () => {
         </div>
         <div className='container-row'>
           <p>
-            {values.isMember ? 'Not a member yer?' : 'Already a member?'}{' '}
+            {values.isMember ? 'Not a member yet?' : 'Already a member?'}{' '}
             <button type='button' onClick={toggleMember} className='member-btn'>
               {values.isMember ? 'Register' : 'Login'}
             </button>

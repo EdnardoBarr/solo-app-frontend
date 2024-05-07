@@ -16,23 +16,19 @@ const ProtectedRoute = ({ children }) => {
         .getLoggedUserEmail()
         .then((res) => setUserDetails(res.data))
         .catch((error) => {
-          if (error.response?.status === 401) {
-            setUserDetails(null);
-            if (token) setToken(null);
-          }
-          navigate('/landing');
+          // if (error.response?.status === 401) {
+          //   setUserDetails(null);
+          //   if (token) setToken(null);
+          // }
+          // navigate('/landing');
         });
     }
   }, [authenticated]);
 
   const onStorageTokenChange = () => {
     if (!localStorage.getItem(tokenKey)) {
-      navigate('/landing', {
-        state: {
-          message: 'Sua sessão expirou. Faça novamente o Login.',
-          severity: 'warning',
-        },
-      });
+      console.log('aaaaa', localStorage.getItem(tokenKey));
+      navigate('/landing');
       setUserDetails(null);
     }
   };
