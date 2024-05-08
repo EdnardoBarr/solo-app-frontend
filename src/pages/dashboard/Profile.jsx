@@ -137,9 +137,11 @@ const Profile = () => {
               className='form-textarea'
             />
           </div>
-          <button className='btn btn-block' type='submit'>
-            save
-          </button>
+          <div className='btn-container'>
+            <button className='btn btn-block' type='submit'>
+              save
+            </button>
+          </div>
         </div>
       </form>
     </Wrapper>
@@ -182,11 +184,12 @@ const Wrapper = styled.section`
     height: 35px;
     margin-top: 1rem;
   }
+  .btn {
+    width: 20%;
+  }
   .btn-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    column-gap: 1rem;
-    align-self: flex-end;
+    display: flex;
+    justify-content: center;
     margin-top: 0.5rem;
     button {
       height: 35px;
@@ -200,22 +203,25 @@ const Wrapper = styled.section`
   }
 
   @media (min-width: 992px) {
-    .form-center {
-      grid-template-columns: 1fr 1fr;
-      align-items: center;
-      column-gap: 1rem;
-    }
     .btn-container {
       margin-top: 0;
     }
   }
-  @media (min-width: 1120px) {
-    .form-center {
-      grid-template-columns: 1fr 1fr 1fr;
+  @media (max-width: 768px) {
+    .container-row {
+      flex-direction: column;
     }
+    .btn {
+      width: 100%;
+    }
+  }
+  @media (min-width: 1120px) {
     .form-center button {
       margin-top: 0;
     }
+    // .btn {
+    //  width: 100%;
+    // }
   }
 `;
 export default Profile;
