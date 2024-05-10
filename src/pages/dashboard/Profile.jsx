@@ -11,6 +11,7 @@ const Profile = () => {
   const { userDetails } = useContext(UserContext);
   const { setUserDetails } = useContext(UserDispatchContext) || {};
   const { isLoading, setIsLoading } = useLoading();
+  const [changePassword, setChangePassword] = useState(false);
   const [userData, setUserData] = useState({
     givenName: userDetails?.givenName || '',
     surname: userDetails?.surname || '',
@@ -23,10 +24,28 @@ const Profile = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const { id, givenName, surname, email, country, city, dateOfBirth, bio } =
-      userData;
+    const {
+      id,
+      givenName,
+      surname,
+      email,
+      country,
+      city,
+      dateOfBirth,
+      bio,
+      oldPassword,
+      password,
+      matchingPassword,
+    } = userData;
 
-    if (!givenName || !surname || !email || !country || !city) {
+    if (
+      !givenName ||
+      !surname ||
+      !email ||
+      !country ||
+      !city ||
+      (changePassword && (!oldPassword || !password || !matchingPassword))
+    ) {
       toast.error('Please fill out all required fields');
       return;
     }
@@ -39,6 +58,10 @@ const Profile = () => {
       .catch((error) =>
         toast.error(error?.response?.data.message || 'Unable to update user')
       );
+  };
+
+  const toggleChangePassword = () => {
+    setChangePassword(!changePassword);
   };
 
   const handleChange = (e) => {
@@ -137,6 +160,44 @@ const Profile = () => {
               className='form-textarea'
             />
           </div>
+          <div className='container-checkbox'>
+            <input
+              type='checkbox'
+              name='checkbox'
+              value={changePassword}
+              onChange={toggleChangePassword}
+              className='form-checkbox'
+              id='form-checkbox'
+            />
+            <label htmlFor='' className='form-label label-checkbox'>
+              Would you like to change your password?
+            </label>
+          </div>
+          {changePassword && (
+            <div className='container-row'>
+              <FormRow
+                type='password'
+                name='oldPassword'
+                labelText='Old Password *'
+                value={userData?.oldPassword || ''}
+                handleChange={handleChange}
+              />
+              <FormRow
+                type='password'
+                name='password'
+                labelText='New Password *'
+                value={userData?.password || ''}
+                handleChange={handleChange}
+              />
+              <FormRow
+                type='password'
+                name='matchingPassword'
+                labelText='Confirm New Password *'
+                value={userData?.matchingPassword || ''}
+                handleChange={handleChange}
+              />
+            </div>
+          )}
           <div className='btn-container'>
             <button className='btn btn-block' type='submit'>
               save
@@ -165,6 +226,22 @@ const Wrapper = styled.section`
     max-width: 100%;
     width: 100%;
   }
+  .container-checkbox {
+    padding-left: 2px;
+    display: flex;
+    gap: 10px;
+  }
+  .label-checkbox {
+    margin: 0;
+  }
+  input[type='checkbox'] {
+    transform: scale(1.5);
+    color: var(--orange-900);
+    cursor: pointer;
+  }
+  input[type='checkbox']:checked {
+    background-color: var(--orange-900);
+  }
   .container-row {
     width: 100%;
     display: flex;
@@ -185,11 +262,11 @@ const Wrapper = styled.section`
     margin-top: 1rem;
   }
   .btn {
-    width: 20%;
+    width: 10%;
   }
   .btn-container {
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     margin-top: 0.5rem;
     button {
       height: 35px;
@@ -202,11 +279,6 @@ const Wrapper = styled.section`
     background: var(--black);
   }
 
-  @media (min-width: 992px) {
-    .btn-container {
-      margin-top: 0;
-    }
-  }
   @media (max-width: 768px) {
     .container-row {
       flex-direction: column;
@@ -214,14 +286,6 @@ const Wrapper = styled.section`
     .btn {
       width: 100%;
     }
-  }
-  @media (min-width: 1120px) {
-    .form-center button {
-      margin-top: 0;
-    }
-    // .btn {
-    //  width: 100%;
-    // }
   }
 `;
 export default Profile;

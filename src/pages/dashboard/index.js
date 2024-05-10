@@ -4,5 +4,14 @@ import Stats from './Stats';
 import SharedLayout from './SharedLayout';
 import Explore from './Explore';
 import Profile from './Profile';
+import ChangePassword from './ChangePassword';
 
-export { AddActivity, AllActivities, Stats, SharedLayout, Explore, Profile };
+export {
+  AddActivity,
+  AllActivities,
+  Stats,
+  SharedLayout,
+  Explore,
+  Profile,
+  ChangePassword,
+};

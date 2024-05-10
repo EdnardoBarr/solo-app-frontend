@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 
 const FormRow = ({ type, name, value, handleChange, labelText }) => {
-  console.log(`name: ${name} value: ${value}`);
   return (
     <div className='form-row'>
       <label htmlFor='' className='form-label'>
