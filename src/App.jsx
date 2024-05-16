@@ -11,6 +11,7 @@ import {
   SharedLayout,
   Explore,
   Profile,
+  ChangePassword,
 } from './pages/dashboard';
 import ProtectedRoute from './pages/ProtectedRoute';
 import { LoadingProvider } from './contexts/loading';
@@ -35,6 +36,7 @@ function App() {
                 <Route path='add-activity' element={<AddActivity />} />
                 <Route path='explore' element={<Explore />} />
                 <Route path='profile' element={<Profile />} />
+                <Route path='password/change' element={<ChangePassword />} />
               </Route>
               <Route path='/landing' element={<Landing />} />
               <Route path='/register' element={<Register />} />

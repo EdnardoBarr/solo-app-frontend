@@ -6,12 +6,12 @@ import { FormRow } from '../../components';
 import userService from '../../services/user-service';
 import { UserContext, UserDispatchContext } from '../../contexts/user';
 import { Loading } from '../../components/Loading';
+import { Link } from 'react-router-dom';
 
 const Profile = () => {
   const { userDetails } = useContext(UserContext);
   const { setUserDetails } = useContext(UserDispatchContext) || {};
   const { isLoading, setIsLoading } = useLoading();
-  const [changePassword, setChangePassword] = useState(false);
   const [userData, setUserData] = useState({
     givenName: userDetails?.givenName || '',
     surname: userDetails?.surname || '',
@@ -24,28 +24,10 @@ const Profile = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const {
-      id,
-      givenName,
-      surname,
-      email,
-      country,
-      city,
-      dateOfBirth,
-      bio,
-      oldPassword,
-      password,
-      matchingPassword,
-    } = userData;
+    const { id, givenName, surname, email, country, city, dateOfBirth, bio } =
+      userData;
 
-    if (
-      !givenName ||
-      !surname ||
-      !email ||
-      !country ||
-      !city ||
-      (changePassword && (!oldPassword || !password || !matchingPassword))
-    ) {
+    if (!givenName || !surname || !email || !country || !city) {
       toast.error('Please fill out all required fields');
       return;
     }
@@ -58,10 +40,6 @@ const Profile = () => {
       .catch((error) =>
         toast.error(error?.response?.data.message || 'Unable to update user')
       );
-  };
-
-  const toggleChangePassword = () => {
-    setChangePassword(!changePassword);
   };
 
   const handleChange = (e) => {
@@ -124,7 +102,7 @@ const Profile = () => {
               handleChange={handleChange}
             />
             <FormRow
-              type='text'
+              type='date'
               name='dateOfBirth'
               labelText='date of birth'
               value={userData?.dateOfBirth || ''}
@@ -160,44 +138,9 @@ const Profile = () => {
               className='form-textarea'
             />
           </div>
-          <div className='container-checkbox'>
-            <input
-              type='checkbox'
-              name='checkbox'
-              value={changePassword}
-              onChange={toggleChangePassword}
-              className='form-checkbox'
-              id='form-checkbox'
-            />
-            <label htmlFor='' className='form-label label-checkbox'>
-              Would you like to change your password?
-            </label>
-          </div>
-          {changePassword && (
-            <div className='container-row'>
-              <FormRow
-                type='password'
-                name='oldPassword'
-                labelText='Old Password *'
-                value={userData?.oldPassword || ''}
-                handleChange={handleChange}
-              />
-              <FormRow
-                type='password'
-                name='password'
-                labelText='New Password *'
-                value={userData?.password || ''}
-                handleChange={handleChange}
-              />
-              <FormRow
-                type='password'
-                name='matchingPassword'
-                labelText='Confirm New Password *'
-                value={userData?.matchingPassword || ''}
-                handleChange={handleChange}
-              />
-            </div>
-          )}
+          <Link to='/password/change'>
+            Would You Like to Change Your Password?
+          </Link>
           <div className='btn-container'>
             <button className='btn btn-block' type='submit'>
               save
@@ -260,6 +203,11 @@ const Wrapper = styled.section`
     align-self: end;
     height: 35px;
     margin-top: 1rem;
+  }
+  a:hover {
+    // color: var(--primary-800);
+    font-weight: bold;
+    transition: var(--transition);
   }
   .btn {
     width: 10%;

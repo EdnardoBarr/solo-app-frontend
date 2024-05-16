@@ -77,7 +77,9 @@ const Wrapper = styled.aside`
       transition: var(--transition);
     }
     .active {
-      color: var(--grey-900);
+      background: var(--orange-500);
+      //  padding-left: 3rem;
+      color: var(--primary-900);
     }
     .active .icon {
       color: var(--primary-500);
