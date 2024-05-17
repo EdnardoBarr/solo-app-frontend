@@ -6,6 +6,8 @@ import Navbar from './Navbar';
 import Avatar from './Avatar';
 import StatsContainer from './StatsContainer';
 import ActivitiesContainer from './ActivitiesContainer';
+import Activity from './Activity';
+import ActivityInfo from './ActivityInfo';
 
 export {
   Logo,
@@ -16,4 +18,6 @@ export {
   Avatar,
   StatsContainer,
   ActivitiesContainer,
+  Activity,
+  ActivityInfo,
 };

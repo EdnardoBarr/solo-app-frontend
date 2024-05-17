@@ -78,7 +78,6 @@ const Wrapper = styled.aside`
     }
     .active {
       background: var(--orange-500);
-      //  padding-left: 3rem;
       color: var(--primary-900);
     }
     .active .icon {

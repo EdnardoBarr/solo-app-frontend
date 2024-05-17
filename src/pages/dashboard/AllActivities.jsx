@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import activityService from '../../services/activity-service';
+import { ActivitiesContainer } from '../../components';
 
 const AllActivities = () => {
-  return <h1>All Activities</h1>;
+  return <ActivitiesContainer />;
 };
 
 export default AllActivities;

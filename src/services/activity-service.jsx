@@ -1,6 +1,10 @@
 import httpCommon from '../http-common';
 
 class ActivityService {
+  getAll() {
+    return httpCommon.get('/activity/all');
+  }
+
   create(
     title,
     description,
