@@ -8,6 +8,7 @@ import StatsContainer from './StatsContainer';
 import ActivitiesContainer from './ActivitiesContainer';
 import Activity from './Activity';
 import ActivityInfo from './ActivityInfo';
+import PageBtnContainer from './PageBtnContainer';
 
 export {
   Logo,
@@ -20,4 +21,5 @@ export {
   ActivitiesContainer,
   Activity,
   ActivityInfo,
+  PageBtnContainer,
 };

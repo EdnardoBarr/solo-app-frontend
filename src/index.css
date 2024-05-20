@@ -201,6 +201,15 @@ ul {
   background: var(--red-dark);
   color: var(--white);
 }
+
+.clear-btn {
+  background: var(--white);
+  color: var(--primry-900);
+  border: 2px solid var(--orange-900);
+}
+.clear-btn:hover {
+  background: var(--grey-100);
+}
 /* alerts */
 .alert {
   padding: 0.375rem 0.75rem;

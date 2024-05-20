@@ -82,7 +82,7 @@ const AddActivity = () => {
         ownerId
       )
       .then((res) => {
-        clearForm();
+        // clearForm();
         toast.success('Activity saved');
       })
       .catch((error) =>

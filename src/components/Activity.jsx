@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import img from '../assets/images/volleyball.jpg';
 import ActivityInfo from './ActivityInfo';
 import { FaBriefcase, FaCalendarAlt, FaLocationArrow } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 const Activity = ({
   id,
@@ -20,7 +21,9 @@ const Activity = ({
   return (
     <Wrapper>
       <header>
-        {/* <img src={img} alt='' /> */}
+        <div className='img-container'>
+          <img src={img} alt='' />
+        </div>
         <div className='info'>
           <h5>{title}</h5>
           <p>{description}</p>
@@ -35,6 +38,16 @@ const Activity = ({
           <ActivityInfo icon={<FaCalendarAlt />} text={startsAt || ''} />
           <ActivityInfo icon={<FaBriefcase />} text={category || ''} />
         </div>
+        <footer>
+          <div className='actions'>
+            <Link to='/add-job' className='btn clear-btn btn-block'>
+              Join
+            </Link>
+            <button type='button' className='btn btn-block'>
+              more
+            </button>
+          </div>
+        </footer>
       </div>
     </Wrapper>
   );
@@ -46,13 +59,14 @@ const Wrapper = styled.article`
   display: grid;
   grid-template-rows: 1fr auto;
   box-shadow: var(--shadow-2);
-
+  border-top: 4px solid var(--orange-900);
+  //max-width: 700px;
   header {
     padding: 1rem 1.5rem;
     border-bottom: 1px solid var(--grey-100);
-    display: grid;
+    /* display: grid;
     grid-template-columns: auto 1fr;
-    align-items: center;
+    align-items: center; */
     h5 {
       letter-spacing: 0;
     }
@@ -60,6 +74,10 @@ const Wrapper = styled.article`
   img {
     width: 300px;
     height: auto;
+    border-radius: var(--borderRadius);
+  }
+  .img-container {
+    text-align: center;
   }
   .main-icon {
     width: 60px;
@@ -114,7 +132,20 @@ const Wrapper = styled.article`
       grid-template-columns: 1fr 1fr;
     }
   }
-
+  .actions {
+    display: flex;
+    gap: 1rem;
+    text-align: center;
+  }
+  .btn-container {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    button {
+      height: 35px;
+    }
+  }
   .status {
     border-radius: var(--borderRadius);
     text-transform: capitalize;
@@ -127,23 +158,13 @@ const Wrapper = styled.article`
   footer {
     margin-top: 1rem;
   }
-  .edit-btn,
-  .delete-btn {
-    letter-spacing: var(--letterSpacing);
-    cursor: pointer;
-    height: 30px;
-  }
-  .edit-btn {
-    color: var(--green-dark);
-    background: var(--green-light);
-    margin-right: 0.5rem;
-  }
-  .delete-btn {
-    color: var(--red-dark);
-    background: var(--red-light);
-  }
   &:hover .actions {
     visibility: visible;
+  }
+  @media (max-width: 576px) {
+    .actions {
+      flex-direction: column;
+    }
   }
 `;
 

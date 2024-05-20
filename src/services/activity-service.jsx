@@ -1,8 +1,8 @@
 import httpCommon from '../http-common';
 
 class ActivityService {
-  getAll() {
-    return httpCommon.get('/activity/all');
+  getAll(currentPage) {
+    return httpCommon.get(`/activity?page=${currentPage}`);
   }
 
   create(
