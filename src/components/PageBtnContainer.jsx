@@ -2,31 +2,27 @@ import React from 'react';
 import styled from 'styled-components';
 import { HiChevronDoubleLeft, HiChevronDoubleRight } from 'react-icons/hi';
 
-const PageBtnContainer = ({
-  totalElements,
-  totalPages,
-  currentPage,
-  setCurrentPage,
-}) => {
+const PageBtnContainer = ({ totalPages, page, setPage }) => {
   const pages = Array.from({ length: totalPages }, (_, index) => {
     return index + 1;
   });
 
   const nextPage = () => {
-    let newPage = currentPage + 1;
-    if (newPage > totalPages) {
-      newPage = 1;
+    let newPage = page + 1;
+    if (newPage > totalPages - 1) {
+      newPage = 0;
     }
     console.log('newpage', newPage);
-    setCurrentPage(newPage);
+    setPage(newPage);
   };
+
   const prevPage = () => {
-    let newPage = currentPage - 1;
+    let newPage = page - 1;
     if (newPage < 0) {
       newPage = totalPages - 1;
     }
     console.log('prevPage', newPage);
-    setCurrentPage(newPage);
+    setPage(newPage);
   };
 
   return (
@@ -41,7 +37,8 @@ const PageBtnContainer = ({
             <button
               type='button'
               key={pageNumber}
-              className={pageNumber === true ? 'pageBtn active' : 'pageBtn'}
+              className={pageNumber - 1 === page ? 'pageBtn active' : 'pageBtn'}
+              onClick={() => setPage(pageNumber - 1)}
             >
               {pageNumber}
             </button>
@@ -60,15 +57,16 @@ const Wrapper = styled.section`
   margin-top: 2rem;
   display: flex;
   align-items: center;
-  justify-content: end;
+  justify-content: center;
   flex-wrap: wrap;
   gap: 1rem;
   .btn-container {
     background: var(--primary-100);
     border-radius: var(--borderRadius);
+    border: 2px solid var(--primary-900);
   }
   .pageBtn {
-    background: transparent;
+    background: var(--white);
     border-color: transparent;
     width: 50px;
     height: 40px;
@@ -76,11 +74,14 @@ const Wrapper = styled.section`
     font-size: 1.25rem;
     color: var(--primary-500);
     transition: var(--transition);
-    border-radius: var(--borderRadius);
+    border-right: 1px solid var(--primary-900);
     cursor: pointer;
   }
+  .pageBtn:hover {
+    background: var(--grey-100);
+  }
   .active {
-    background: var(--primary-500);
+    background: var(--orange-500);
     color: var(--white);
   }
   .prev-btn,
@@ -99,11 +100,16 @@ const Wrapper = styled.section`
     gap: 0.5rem;
     cursor: pointer;
     transition: var(--transition);
+    border: 2px solid var(--primary-900);
   }
   .prev-btn:hover,
   .next-btn:hover {
-    background: var(--primary-500);
-    color: var(--white);
+    background: var(--grey-100);
+  }
+  @media (max-width: 576px) {
+    section {
+      flex-direction: column;
+    }
   }
 `;
 

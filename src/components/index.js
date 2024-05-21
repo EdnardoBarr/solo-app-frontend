@@ -9,6 +9,7 @@ import ActivitiesContainer from './ActivitiesContainer';
 import Activity from './Activity';
 import ActivityInfo from './ActivityInfo';
 import PageBtnContainer from './PageBtnContainer';
+import SearchContainer from './SearchContainer';
 
 export {
   Logo,
@@ -22,4 +23,5 @@ export {
   Activity,
   ActivityInfo,
   PageBtnContainer,
+  SearchContainer,
 };

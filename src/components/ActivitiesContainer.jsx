@@ -4,15 +4,18 @@ import activityService from '../services/activity-service';
 import Activity from './Activity';
 import PageBtnContainer from './PageBtnContainer';
 
-const ActivitiesContainer = () => {
+const ActivitiesContainer = ({ activityFilter }) => {
   const [activities, setActivities] = useState([]);
   const [totalElements, setTotalElements] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
-  const [currentPage, setCurrentPage] = useState(0);
+  const [page, setPage] = useState(0);
 
   useEffect(() => {
+    let params = { ...activityFilter };
+    params.page = page;
+
     activityService
-      .getAll(currentPage)
+      .getAll(params)
       .then((res) => {
         setActivities(res?.data?.content);
         setTotalElements(res?.data?.totalElements);
@@ -20,7 +23,7 @@ const ActivitiesContainer = () => {
         console.log('getAll', res.data);
       })
       .catch((error) => console.log('error', error));
-  }, [currentPage]);
+  }, [page, activityFilter]);
 
   if (activities?.content?.length === 0) {
     return (
@@ -39,10 +42,9 @@ const ActivitiesContainer = () => {
       </div>
       {totalPages > 1 && (
         <PageBtnContainer
-          totalElements={totalElements}
           totalPages={totalPages}
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
+          page={page}
+          setPage={setPage}
         />
       )}
     </Wrapper>

@@ -175,7 +175,7 @@ const AddActivity = () => {
             </div>
           </div>
           <div className='btn-container'>
-            <button className='btn clear-btn' type='reset'>
+            <button className='btn clear-btn' type='reset' onClick={clearForm}>
               clear
             </button>
             <button className='btn btn-block' type='submit'>
