@@ -4,6 +4,7 @@ import { FormRow } from '../../components';
 import { toast } from 'react-toastify';
 import activityService from '../../services/activity-service';
 import { UserContext } from '../../contexts/user';
+import activityCategories from '../../utils/activityCategories';
 
 const initialState = {
   title: '',
@@ -153,13 +154,24 @@ const AddActivity = () => {
             />
           </div>
           <div className='container-row'>
-            <FormRow
-              type='text'
-              name='category'
-              labelText='category *'
-              handleChange={handleChange}
-              value={data?.category || ''}
-            />
+            <div className='form-row'>
+              <label className='form-label'>Category</label>
+              <select
+                name='category'
+                className='form-select'
+                onChange={handleChange}
+              >
+                <option defaultValue=''>Select a Category</option>
+                {activityCategories.map((activityCategory) => {
+                  const { id, category, value } = activityCategory;
+                  return (
+                    <option value={value} key={id}>
+                      {category}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
             <div className='form-row'>
               <label htmlFor='' className='form-label'>
                 How Many People Can Join? *

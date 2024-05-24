@@ -5,6 +5,7 @@ import SharedLayout from './SharedLayout';
 import Explore from './Explore';
 import Profile from './Profile';
 import ChangePassword from './ChangePassword';
+import SingleActivity from './SingleActivity';
 
 export {
   AddActivity,
@@ -14,4 +15,5 @@ export {
   Explore,
   Profile,
   ChangePassword,
+  SingleActivity,
 };

@@ -5,19 +5,20 @@ import ActivityInfo from './ActivityInfo';
 import { FaBriefcase, FaCalendarAlt, FaLocationArrow } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
-const Activity = ({
-  id,
-  active,
-  category,
-  createdAt,
-  startsAt,
-  finishesAt,
-  description,
-  location,
-  maxParticipants,
-  mediaLocation,
-  title,
-}) => {
+const Activity = ({ activity }) => {
+  const {
+    id,
+    active,
+    category,
+    createdAt,
+    startsAt,
+    finishesAt,
+    description,
+    location,
+    maxParticipants,
+    mediaLocation,
+    title,
+  } = activity;
   return (
     <Wrapper>
       <header>
@@ -36,16 +37,23 @@ const Activity = ({
             text={location?.city || ''}
           />
           <ActivityInfo icon={<FaCalendarAlt />} text={startsAt || ''} />
-          <ActivityInfo icon={<FaBriefcase />} text={category || ''} />
+          <ActivityInfo
+            icon={<FaBriefcase />}
+            text={category.toLowerCase() || ''}
+          />
         </div>
         <footer>
           <div className='actions'>
             <Link to='/add-job' className='btn clear-btn btn-block'>
               Join
             </Link>
-            <button type='button' className='btn btn-block'>
+            <Link
+              to='/activity-details'
+              className='btn btn-block btn-more'
+              state={{ activityDetails: activity }}
+            >
               more
-            </button>
+            </Link>
           </div>
         </footer>
       </div>
@@ -92,6 +100,11 @@ const Wrapper = styled.article`
     color: var(--white);
     margin-right: 2rem;
   }
+  a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
   .info {
     h5 {
       margin-bottom: 0.25rem;
@@ -137,14 +150,16 @@ const Wrapper = styled.article`
     gap: 1rem;
     text-align: center;
   }
+  .btn-more {
+    height: 35px;
+    color: var(--white);
+    text-align: center;
+  }
   .btn-container {
     display: flex;
     justify-content: flex-end;
     gap: 0.5rem;
     margin-top: 0.5rem;
-    button {
-      height: 35px;
-    }
   }
   .status {
     border-radius: var(--borderRadius);

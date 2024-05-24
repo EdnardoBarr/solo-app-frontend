@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import FormRow from './FormRow';
+import activityCategories from '../utils/activityCategories';
 
 const INITIAL_STATE = {
   title: '',
@@ -18,6 +19,9 @@ const SearchContainer = ({ activityFilter, setActivityFilter }) => {
   const handleChange = (e) => {
     const name = e.target.name;
     const value = e.target.value;
+
+    console.log('name', name);
+    console.log('value', value);
 
     setActivityFilter({ ...activityFilter, [name]: value });
   };
@@ -45,13 +49,31 @@ const SearchContainer = ({ activityFilter, setActivityFilter }) => {
             value={activityFilter?.city || ''}
             handleChange={handleChange}
           />
-          <FormRow
+          <div className='form-row'>
+            <label className='form-label'>Category</label>
+            <select
+              name='category'
+              className='form-select'
+              onChange={handleChange}
+            >
+              <option defaultValue=''>Select a Category</option>
+              {activityCategories.map((activityCategory) => {
+                const { id, category, value } = activityCategory;
+                return (
+                  <option value={value} key={id}>
+                    {category}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
+          {/* <FormRow
             type='text'
             name='category'
             labelText='Category'
             value={activityFilter?.category || ''}
             handleChange={handleChange}
-          />
+          /> */}
           <FormRow
             type='date'
             name='initialStartDate'
@@ -72,9 +94,9 @@ const SearchContainer = ({ activityFilter, setActivityFilter }) => {
           <button type='reset' className='clear-btn btn' onClick={clearForm}>
             Clear
           </button>
-          <button type='button' className='btn filter-btn'>
+          {/* <button type='button' className='btn filter-btn'>
             Filter
-          </button>
+          </button> */}
         </div>
       </form>
     </Wrapper>
@@ -145,7 +167,7 @@ const Wrapper = styled.section`
     gap: 1.5rem;
   }
   .btn {
-    width: 10%;
+    width: 15%;
   }
   .clear-btn {
     border: 2px solid var(--primary-800);
@@ -158,6 +180,11 @@ const Wrapper = styled.section`
   .filter-btn:hover {
     background: var(--primary-900);
     transition: var(--transition);
+  }
+  @media (max-width: 992px) {
+    .btn {
+      width: 100%;
+    }
   }
 `;
 

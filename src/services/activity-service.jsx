@@ -34,6 +34,11 @@ class ActivityService {
       ownerId,
     });
   }
+
+  joinActivity(activityId, userId) {
+    console.log('userId', userId);
+    return httpCommon.post(`activity/member/request/${activityId}`, userId);
+  }
 }
 
 export default new ActivityService();

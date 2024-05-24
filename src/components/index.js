@@ -10,6 +10,9 @@ import Activity from './Activity';
 import ActivityInfo from './ActivityInfo';
 import PageBtnContainer from './PageBtnContainer';
 import SearchContainer from './SearchContainer';
+import ActivityDetails from './ActivityDetails';
+import ActivityCommentSection from './ActivityCommentSection';
+import Comment from './Comment';
 
 export {
   Logo,
@@ -24,4 +27,7 @@ export {
   ActivityInfo,
   PageBtnContainer,
   SearchContainer,
+  ActivityDetails,
+  ActivityCommentSection,
+  Comment,
 };

@@ -37,7 +37,7 @@ const ActivitiesContainer = ({ activityFilter }) => {
     <Wrapper>
       <div className='activities'>
         {activities?.map((activity, i) => {
-          return <Activity key={i} {...activity} />;
+          return <Activity key={i} activity={activity} />;
         })}
       </div>
       {totalPages > 1 && (
