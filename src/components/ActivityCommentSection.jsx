@@ -5,6 +5,7 @@ import activityCommentService from '../services/activity-comment-service';
 import { UserContext } from '../contexts/user';
 import { useLocation } from 'react-router-dom';
 import Comment from './Comment';
+import PageBtnContainer from './PageBtnContainer';
 
 const INITIAL_STATE = {
   comment: '',
@@ -17,6 +18,9 @@ const ActivityCommentSection = () => {
   const [comments, setComments] = useState([]);
   const { userDetails } = useContext(UserContext);
   const { activityDetails } = locationActivity.state;
+  const [totalElements, setTotalElements] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
+  const [page, setPage] = useState(0);
 
   const handleChange = (e) => {
     const name = e.target.name;
@@ -64,14 +68,19 @@ const ActivityCommentSection = () => {
 
   useEffect(() => {
     const activityId = activityDetails?.id;
+    let params = {};
+    params.page = page;
+
     activityCommentService
-      .getAll(activityId)
+      .getAll(activityId, params)
       .then((res) => {
         console.log('res', res.data);
-        setComments([...res.data]);
+        setComments([...res?.data?.content]);
+        setTotalElements(res?.data?.totalElements);
+        setTotalPages(res?.data?.totalPages);
       })
       .catch();
-  }, [reload]);
+  }, [reload, page]);
 
   return (
     <Wrapper>
@@ -89,7 +98,7 @@ const ActivityCommentSection = () => {
           className='form-textarea'
         />
       </div>
-      <footer className='btn-container'>
+      <footer className='btn-action-conteiner'>
         <button type='reset' className='clear-btn btn' onClick={clearForm}>
           Clear
         </button>
@@ -99,13 +108,27 @@ const ActivityCommentSection = () => {
       </footer>
       <div className='comment-container'>
         {comments.map((item, i) => {
-          const { user: userInfo, comment, createdAt, updatedAt } = item;
-          const commentInfo = { comment, createdAt, updatedAt };
+          const activityId = activityDetails?.id;
+          const { user: userInfo, comment, createdAt, updatedAt, id } = item;
+          const commentInfo = { comment, createdAt, updatedAt, id };
           return (
-            <Comment commentInfo={commentInfo} userInfo={userInfo} key={i} />
+            <Comment
+              commentInfo={commentInfo}
+              userInfo={userInfo}
+              reload={reload}
+              setReload={setReload}
+              key={i}
+            />
           );
         })}
       </div>
+      {totalPages > 1 && (
+        <PageBtnContainer
+          totalPages={totalPages}
+          page={page}
+          setPage={setPage}
+        />
+      )}
     </Wrapper>
   );
 };
@@ -123,7 +146,7 @@ const Wrapper = styled.section`
   .form-row {
     width: 100%;
   }
-  .btn-container {
+  .btn-action-conteiner {
     margin-top: 2rem;
     display: flex;
     justify-content: end;
@@ -149,7 +172,7 @@ const Wrapper = styled.section`
     transition: var(--transition);
   }
   @media (max-width: 576px) {
-    .btn-container {
+    .btn-action-conteiner {
       flex-direction: column;
     }
   }

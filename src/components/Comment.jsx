@@ -1,24 +1,73 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import { FaPencilAlt, FaRegTrashAlt } from 'react-icons/fa';
+import { FaPencilAlt, FaRegTrashAlt, MdCancel, FaCheck } from 'react-icons/fa';
+import moment from 'moment';
+import activityCommentService from '../services/activity-comment-service';
+import { toast } from 'react-toastify';
+import FormRow from './FormRow';
 
-const Comment = ({ commentInfo, userInfo }) => {
-  const { comment, createdAt, updatedAt } = commentInfo;
+const Comment = ({ commentInfo, userInfo, reload, setReload }) => {
+  const { comment, createdAt, updatedAt, id } = commentInfo;
   const { givenName } = userInfo || '';
+  const [commentText, setCommentText] = useState({ comment: comment });
+  const [isEdit, setIsEdit] = useState(false);
+  const formattedCreatedAt = createdAt
+    ? moment(createdAt).format('LLL')
+    : createdAt;
+
+  const handleChange = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+
+    setCommentText({ [name]: value });
+  };
+
+  const handleEdit = () => {
+    setIsEdit(true);
+  };
+
+  const handleDelete = () => {
+    console.log('commentInfo', commentInfo);
+    activityCommentService
+      .delete(id)
+      .then(() => {
+        toast.success('Comment deleted succesfully');
+        setReload(!reload);
+      })
+      .catch((error) => {
+        console.log('errorComment', error.data);
+        toast.error('Error deleting comment');
+      });
+  };
   return (
     <Wrapper>
-      <p>{comment}</p>
+      {isEdit ? (
+        <div className='form-row'>
+          <textarea
+            type='text'
+            rows='2'
+            name='comment'
+            value={commentText?.comment || ''}
+            onChange={handleChange}
+            className='form-textarea'
+          />
+        </div>
+      ) : (
+        <p>{comment}</p>
+      )}
       <div className='footer-container'>
         <div className='user-info'>
-          <span>
-            {givenName}, on {createdAt}
-          </span>
+          {isEdit ? null : (
+            <span>
+              {givenName} on {formattedCreatedAt}
+            </span>
+          )}
         </div>
         <div className='btn-container'>
-          <button className='btn-action'>
+          <button className='btn-action' onClick={handleEdit}>
             <FaPencilAlt />
           </button>
-          <button className='btn-action'>
+          <button className='btn-action' onClick={handleDelete}>
             <FaRegTrashAlt />
           </button>
         </div>

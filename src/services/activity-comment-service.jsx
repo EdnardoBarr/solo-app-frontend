@@ -5,8 +5,8 @@ class ActivityComment {
     return httpCommon.get(`/activity-comment/${id}`);
   }
 
-  getAll(id) {
-    return httpCommon.get(`/activity-comment/all/${id}`);
+  getAll(id, params) {
+    return httpCommon.get(`/activity-comment/all/${id}`, { params });
   }
 
   create(params) {

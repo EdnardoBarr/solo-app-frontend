@@ -13,10 +13,13 @@ const ActivitiesContainer = ({ activityFilter }) => {
   useEffect(() => {
     let params = { ...activityFilter };
     params.page = page;
+    params.page;
+    console.log('params', params);
 
     activityService
       .getAll(params)
       .then((res) => {
+        console.log('reees', res.data);
         setActivities(res?.data?.content);
         setTotalElements(res?.data?.totalElements);
         setTotalPages(res?.data?.totalPages);
