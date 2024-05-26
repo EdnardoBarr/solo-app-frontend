@@ -13,9 +13,11 @@ import {
   Profile,
   ChangePassword,
   SingleActivity,
+  Connect,
 } from './pages/dashboard';
 import ProtectedRoute from './pages/ProtectedRoute';
 import { LoadingProvider } from './contexts/loading';
+import Friendship from './pages/Friendship';
 
 function App() {
   return (
@@ -35,7 +37,7 @@ function App() {
                 <Route index element={<Stats />} />
                 <Route path='all-activities' element={<AllActivities />} />
                 <Route path='add-activity' element={<AddActivity />} />
-                <Route path='explore' element={<Explore />} />
+                <Route path='connect' element={<Connect />} />
                 <Route path='profile' element={<Profile />} />
                 <Route path='password/change' element={<ChangePassword />} />
                 <Route path='activity-details' element={<SingleActivity />} />

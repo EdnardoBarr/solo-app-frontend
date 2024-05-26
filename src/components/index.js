@@ -13,6 +13,9 @@ import SearchContainer from './SearchContainer';
 import ActivityDetails from './ActivityDetails';
 import ActivityCommentSection from './ActivityCommentSection';
 import Comment from './Comment';
+import FriendshipContainer from './FriendshipContainer';
+import SearchUserContainer from './SearchUserContainer';
+import UsersContainer from './UsersContainer';
 
 export {
   Logo,
@@ -30,4 +33,7 @@ export {
   ActivityDetails,
   ActivityCommentSection,
   Comment,
+  FriendshipContainer,
+  SearchUserContainer,
+  UsersContainer,
 };

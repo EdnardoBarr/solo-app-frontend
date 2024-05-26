@@ -14,7 +14,7 @@ class ActivityComment {
   }
 
   update(id, params) {
-    return httpCommon.put(`/activity-comment/update/${id}`, { params });
+    return httpCommon.put(`/activity-comment/update/${id}`, params);
   }
 
   delete(id) {

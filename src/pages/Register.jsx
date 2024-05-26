@@ -7,6 +7,8 @@ import loginService from '../services/login-service';
 import { useAuth } from '../contexts/auth';
 import userService from '../services/user-service';
 import localStorageService from '../services/localStorage-service';
+import Select from 'react-select';
+import userInterests from '../utils/userInterests';
 
 const initialState = {
   email: '',
@@ -159,22 +161,24 @@ const Register = () => {
           )}
         </div>
         {!values.isMember && (
-          <div className='container-row'>
-            <FormRow
-              type='text'
-              name='country'
-              value={values.country}
-              handleChange={handleChange}
-              labelText='Country'
-            />
-            <FormRow
-              type='text'
-              name='city'
-              value={values.city}
-              handleChange={handleChange}
-              labelText='City'
-            />
-          </div>
+          <>
+            <div className='container-row'>
+              <FormRow
+                type='text'
+                name='country'
+                value={values.country}
+                handleChange={handleChange}
+                labelText='Country'
+              />
+              <FormRow
+                type='text'
+                name='city'
+                value={values.city}
+                handleChange={handleChange}
+                labelText='City'
+              />
+            </div>
+          </>
         )}
 
         <div className='container-row'>
@@ -217,6 +221,9 @@ const Wrapper = styled.section`
   }
   .form h3 {
     text-align: center;
+  }
+  .react-select-container {
+    border-radius: var(--borderRadius);
   }
   p {
     margin: 0;

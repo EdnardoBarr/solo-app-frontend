@@ -81,6 +81,11 @@ const Wrapper = styled.section`
     height: auto;
     border-radius: var(--borderRadius);
   }
+  p {
+    max-width: fit-content;
+    text-align: justify;
+    text-justify: inter-word;
+  }
   .activity-info {
     /* display: flex;
     justify-content: center; */

@@ -1,19 +1,29 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { FaPencilAlt, FaRegTrashAlt, MdCancel, FaCheck } from 'react-icons/fa';
+import { FaPencilAlt, FaRegTrashAlt, FaCheck } from 'react-icons/fa';
+import { MdCancel } from 'react-icons/md';
 import moment from 'moment';
 import activityCommentService from '../services/activity-comment-service';
 import { toast } from 'react-toastify';
 import FormRow from './FormRow';
 
-const Comment = ({ commentInfo, userInfo, reload, setReload }) => {
+const Comment = ({
+  commentsArray,
+  commentInfo,
+  userInfo,
+  reload,
+  setReload,
+}) => {
   const { comment, createdAt, updatedAt, id } = commentInfo;
   const { givenName } = userInfo || '';
-  const [commentText, setCommentText] = useState({ comment: comment });
+  const [commentText, setCommentText] = useState({ [`comment${id}`]: comment });
   const [isEdit, setIsEdit] = useState(false);
   const formattedCreatedAt = createdAt
     ? moment(createdAt).format('LLL')
     : createdAt;
+  const formatedUpdatedAt = updatedAt
+    ? moment(updatedAt).format('LLL')
+    : updatedAt;
 
   const handleChange = (e) => {
     const name = e.target.name;
@@ -22,12 +32,29 @@ const Comment = ({ commentInfo, userInfo, reload, setReload }) => {
     setCommentText({ [name]: value });
   };
 
-  const handleEdit = () => {
+  const handleEdit = (e) => {
+    setCommentText({ [`comment${id}`]: comment });
     setIsEdit(true);
   };
 
+  const handleCancelEdit = () => {
+    setIsEdit(false);
+  };
+
+  const handleSubmitEdit = () => {
+    let params = {};
+    params.comment = commentText[`comment${id}`];
+    activityCommentService
+      .update(id, params)
+      .then(() => {
+        toast.success('Comment edited succesfully');
+        setIsEdit(false);
+        setReload(!reload);
+      })
+      .catch((error) => {});
+  };
+
   const handleDelete = () => {
-    console.log('commentInfo', commentInfo);
     activityCommentService
       .delete(id)
       .then(() => {
@@ -40,14 +67,14 @@ const Comment = ({ commentInfo, userInfo, reload, setReload }) => {
       });
   };
   return (
-    <Wrapper>
+    <Wrapper className='comment-container'>
       {isEdit ? (
         <div className='form-row'>
           <textarea
             type='text'
             rows='2'
-            name='comment'
-            value={commentText?.comment || ''}
+            name={`comment${id}`}
+            value={commentText[`comment${id}`] || ''}
             onChange={handleChange}
             className='form-textarea'
           />
@@ -57,19 +84,31 @@ const Comment = ({ commentInfo, userInfo, reload, setReload }) => {
       )}
       <div className='footer-container'>
         <div className='user-info'>
-          {isEdit ? null : (
-            <span>
-              {givenName} on {formattedCreatedAt}
-            </span>
-          )}
+          <span>
+            {givenName} {updatedAt ? `edited` : `wrote`} on{' '}
+            {updatedAt ? formatedUpdatedAt : formattedCreatedAt}
+          </span>
         </div>
         <div className='btn-container'>
-          <button className='btn-action' onClick={handleEdit}>
-            <FaPencilAlt />
-          </button>
-          <button className='btn-action' onClick={handleDelete}>
-            <FaRegTrashAlt />
-          </button>
+          {isEdit ? (
+            <>
+              <button className='btn-action' onClick={handleSubmitEdit}>
+                <FaCheck />
+              </button>
+              <button className='btn-action' onClick={handleCancelEdit}>
+                <MdCancel />
+              </button>
+            </>
+          ) : (
+            <>
+              <button className='btn-action' onClick={handleEdit}>
+                <FaPencilAlt />
+              </button>
+              <button className='btn-action' onClick={handleDelete}>
+                <FaRegTrashAlt />
+              </button>
+            </>
+          )}
         </div>
       </div>
     </Wrapper>
@@ -92,6 +131,9 @@ const Wrapper = styled.div`
   p {
     text-align: justify;
     text-justify: inter-word;
+  }
+  .comment-container:hover {
+    box-shadow: var(--shadow-2);
   }
 
   .footer-container {
@@ -116,6 +158,11 @@ const Wrapper = styled.div`
     transition: var(--transition);
     text-transform: capitalize;
     display: inline-block;
+  }
+  .btn-action:hover {
+    box-shadow: var(--shadow-2);
+    border-radius: var(--borderRadius);
+    color: var(--primary-900);
   }
 `;
 

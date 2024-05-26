@@ -5,12 +5,16 @@ class UserService {
     return httpCommon.get('/user/logged');
   }
 
-  getUserByEmail(email) {
-    return httpCommon.get(`/user/retrieve/${email}`);
-  }
+  // getUserByEmail(email) {
+  //   return httpCommon.get(`/user/retrieve/${email}`);
+  // }
 
   getUserById(id) {
     return httpCommon.get(`/user/${id}`);
+  }
+
+  getAll(params) {
+    return httpCommon.get(`/user/all`, { params });
   }
 
   doLogin(email, password) {
@@ -29,13 +33,24 @@ class UserService {
     });
   }
 
-  update(id, givenName, surname, email, country, city, dateOfBirth, bio) {
+  update(
+    id,
+    givenName,
+    surname,
+    email,
+    country,
+    city,
+    interests,
+    dateOfBirth,
+    bio
+  ) {
     return httpCommon.put(`/user/update/${id}`, {
       givenName,
       surname,
       email,
       country,
       city,
+      interests,
       dateOfBirth,
       bio,
     });

@@ -112,6 +112,8 @@ const Wrapper = styled.article`
     p {
       margin: 0;
       text-transform: capitalize;
+      text-align: justify;
+      text-justify: inter-word;
       color: var(--grey-400);
       letter-spacing: var(--letterSpacing);
     }

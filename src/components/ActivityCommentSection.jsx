@@ -39,7 +39,6 @@ const ActivityCommentSection = () => {
     const activityId = activityDetails?.id;
     const userId = userDetails?.id;
     let params = { activityId, userId, comment };
-    console.log('params', params);
 
     if (!comment) {
       toast.error('Please fill out the required field');
@@ -56,6 +55,7 @@ const ActivityCommentSection = () => {
       .then(() => {
         setComments([comment, ...comments]);
         setReload(!reload);
+        clearForm();
         toast.success('Comment added successfully');
       })
       .catch((error) =>
@@ -74,7 +74,6 @@ const ActivityCommentSection = () => {
     activityCommentService
       .getAll(activityId, params)
       .then((res) => {
-        console.log('res', res.data);
         setComments([...res?.data?.content]);
         setTotalElements(res?.data?.totalElements);
         setTotalPages(res?.data?.totalPages);
@@ -113,6 +112,7 @@ const ActivityCommentSection = () => {
           const commentInfo = { comment, createdAt, updatedAt, id };
           return (
             <Comment
+              commentsArray={comments}
               commentInfo={commentInfo}
               userInfo={userInfo}
               reload={reload}
@@ -152,8 +152,7 @@ const Wrapper = styled.section`
     justify-content: end;
     gap: 1.5rem;
   }
-  .comment-container {
-  }
+
   /* .btn {
     width: 35%;
   } */

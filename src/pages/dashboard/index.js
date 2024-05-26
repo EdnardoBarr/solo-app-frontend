@@ -6,6 +6,7 @@ import Explore from './Explore';
 import Profile from './Profile';
 import ChangePassword from './ChangePassword';
 import SingleActivity from './SingleActivity';
+import Connect from './Connect';
 
 export {
   AddActivity,
@@ -16,4 +17,5 @@ export {
   Profile,
   ChangePassword,
   SingleActivity,
+  Connect,
 };

@@ -7,6 +7,8 @@ import userService from '../../services/user-service';
 import { UserContext, UserDispatchContext } from '../../contexts/user';
 import { Loading } from '../../components/Loading';
 import { Link } from 'react-router-dom';
+import Select from 'react-select';
+import userInterests from '../../utils/userInterests';
 
 const Profile = () => {
   const { userDetails } = useContext(UserContext);
@@ -19,20 +21,38 @@ const Profile = () => {
     country: userDetails?.country || '',
     city: userDetails?.city || '',
     dateOfBirth: userDetails?.dateOfBirth || '',
+    interests: userDetails?.interests || [{ id: 0, label: '', value: '' }],
     bio: userDetails?.bio || '',
   });
+
+  useEffect(() => {
+    setUserData({ ...userDetails });
+  }, [userDetails]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const { id, givenName, surname, email, country, city, dateOfBirth, bio } =
       userData;
+    const interests = userData?.interests.map((item) => {
+      return item.value;
+    });
 
     if (!givenName || !surname || !email || !country || !city) {
       toast.error('Please fill out all required fields');
       return;
     }
     userService
-      .update(id, givenName, surname, email, country, city, dateOfBirth, bio)
+      .update(
+        id,
+        givenName,
+        surname,
+        email,
+        country,
+        city,
+        interests,
+        dateOfBirth,
+        bio
+      )
       .then((res) => {
         setUserDetails(null);
         toast.success('User has been updated');
@@ -49,26 +69,10 @@ const Profile = () => {
     setUserData({ ...userData, [name]: value });
   };
 
-  useEffect(() => {
-    const username = userDetails?.username;
-    if (username) {
-      // function retrieveUserData() {
-      userService
-        .getUserByEmail(username)
-        .then((res) => {
-          // setIsLoading(true);
-          setUserData(res?.data || {});
-          // setIsLoading(false);
-        })
-        .catch((err) => toast.error('User not found'));
-      // .finally(() => setIsLoading(true));
-
-      // }
-      // retrieveUserData();
-    } else {
-      setUserData({});
-    }
-  }, [userDetails?.username]);
+  const handleSelectChange = (e) => {
+    console.log('e', e);
+    setUserData({ ...userData, interests: e });
+  };
 
   return isLoading ? (
     <Loading />
@@ -123,6 +127,23 @@ const Profile = () => {
               labelText='city *'
               value={userData?.city || ''}
               handleChange={handleChange}
+            />
+          </div>
+          <div className='form-row'>
+            <label className='form-label'>Interests</label>
+            <Select
+              name='interests'
+              value={userData?.interests || [{ id: 0, label: '', value: '' }]}
+              onChange={handleSelectChange}
+              options={userInterests}
+              isMulti
+              className='react-select-container'
+              styles={{
+                control: (baseStyles) => ({
+                  ...baseStyles,
+                  background: '#d9e2ec',
+                }),
+              }}
             />
           </div>
           <div className='form-row'>

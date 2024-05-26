@@ -27,7 +27,6 @@ const ProtectedRoute = ({ children }) => {
 
   const onStorageTokenChange = () => {
     if (!localStorage.getItem(tokenKey)) {
-      console.log('aaaaa', localStorage.getItem(tokenKey));
       navigate('/landing');
       setUserDetails(null);
     }
