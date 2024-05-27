@@ -16,6 +16,7 @@ import Comment from './Comment';
 import FriendshipContainer from './FriendshipContainer';
 import SearchUserContainer from './SearchUserContainer';
 import UsersContainer from './UsersContainer';
+import User from './User';
 
 export {
   Logo,
@@ -36,4 +37,5 @@ export {
   FriendshipContainer,
   SearchUserContainer,
   UsersContainer,
+  User,
 };

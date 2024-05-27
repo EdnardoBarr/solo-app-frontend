@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import PageBtnContainer from './PageBtnContainer';
+import User from './User';
+import userService from '../services/user-service';
 
-const UsersContainer = ({ userFilter }) => {
+const UsersContainer = ({ userFilter, setUserFilter }) => {
   const [users, setUsers] = useState([]);
   const [totalElements, setTotalElements] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
@@ -13,7 +16,7 @@ const UsersContainer = ({ userFilter }) => {
     params.page;
     console.log('params', params);
 
-    activityService
+    userService
       .getAll(params)
       .then((res) => {
         console.log('reees', res.data);
@@ -37,7 +40,7 @@ const UsersContainer = ({ userFilter }) => {
     <Wrapper>
       <div className='users'>
         {users?.map((user, i) => {
-          return <Activity key={i} activity={activity} />;
+          return <User key={i} user={user} />;
         })}
       </div>
       {totalPages > 1 && (
