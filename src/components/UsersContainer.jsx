@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import PageBtnContainer from './PageBtnContainer';
 import User from './User';
 import userService from '../services/user-service';
+import { UserContext } from '../contexts/user';
 
 const UsersContainer = ({ userFilter, setUserFilter }) => {
+  const { userDetails } = useContext(UserContext);
   const [users, setUsers] = useState([]);
   const [totalElements, setTotalElements] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
@@ -40,7 +42,9 @@ const UsersContainer = ({ userFilter, setUserFilter }) => {
     <Wrapper>
       <div className='users'>
         {users?.map((user, i) => {
-          return <User key={i} user={user} />;
+          const { id: userId } = user;
+          const { id } = userDetails;
+          return userId !== id && <User key={i} user={user} />;
         })}
       </div>
       {totalPages > 1 && (

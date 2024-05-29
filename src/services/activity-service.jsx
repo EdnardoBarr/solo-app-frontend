@@ -35,9 +35,8 @@ class ActivityService {
     });
   }
 
-  joinActivity(activityId, userId) {
-    console.log('userId', userId);
-    return httpCommon.post(`activity/member/request/${activityId}`, userId);
+  joinActivity(params) {
+    return httpCommon.post(`activity/member/join`, params);
   }
 }
 

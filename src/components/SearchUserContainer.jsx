@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import Select from 'react-select';
 import userInterests from '../utils/userInterests';
@@ -11,23 +11,26 @@ const INITIAL_STATE = {
 };
 
 const SearchUserContainer = ({ userFilter, setUserFilter }) => {
+  const [selectData, setSelectData] = useState([]);
   const clearForm = () => {
     setUserFilter(INITIAL_STATE);
+    setSelectData([]);
   };
 
   const handleChange = (e) => {
     const name = e.target.name;
     const value = e.target.value;
 
-    console.log('name', name);
-    console.log('value', value);
-
     setUserFilter({ ...userFilter, [name]: value });
   };
 
   const handleSelectChange = (e) => {
-    console.log('e', e);
-    setUserFilter({ ...userFilter, interests: e });
+    let aux = e.map((item, i) => {
+      return `${item.id},${item.label},${item.value}`;
+    });
+
+    setSelectData({ interests: e });
+    setUserFilter({ ...userFilter, interests: aux });
   };
 
   const handleSubmit = (e) => {
@@ -57,7 +60,7 @@ const SearchUserContainer = ({ userFilter, setUserFilter }) => {
             <label className='form-label'>Interests</label>
             <Select
               name='interests'
-              value={userFilter?.interests || [{ id: 0, label: '', value: '' }]}
+              value={selectData?.interests || []}
               onChange={handleSelectChange}
               options={userInterests}
               isMulti

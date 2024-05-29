@@ -11,7 +11,7 @@ import { toast } from 'react-toastify';
 const ActivityDetails = () => {
   const locationActivity = useLocation();
   const { userDetails } = useContext(UserContext);
-  const { activityDetails } = locationActivity.state;
+  const { activityDetails, isOwner } = locationActivity.state;
   const {
     id,
     active,
@@ -54,9 +54,23 @@ const ActivityDetails = () => {
         />
       </div>
       <footer className='btn-container'>
-        <button type='button' className='btn btn-block' onClick={requestToJoin}>
-          join
-        </button>
+        {isOwner ? (
+          <button
+            type='button'
+            className='btn btn-block btn-disabled'
+            onClick={(e) => e.preventDefault()}
+          >
+            join
+          </button>
+        ) : (
+          <button
+            type='button'
+            className='btn btn-block'
+            onClick={requestToJoin}
+          >
+            join
+          </button>
+        )}
       </footer>
     </Wrapper>
   );
@@ -96,6 +110,13 @@ const Wrapper = styled.section`
   .btn-container {
     display: flex;
     justify-content: flex-end;
+  }
+  .btn-disabled {
+    cursor: default;
+    background: var(--grey-100);
+    color: var(--grey-300);
+    border: 1px solid var(--grey-100);
+    box-shadow: none;
   }
   .info {
     display: flex;

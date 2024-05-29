@@ -1,14 +1,21 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import img from '../assets/images/volleyball.jpg';
 import ActivityInfo from './ActivityInfo';
 import { FaBriefcase, FaCalendarAlt, FaLocationArrow } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import { UserContext } from '../contexts/user';
+import activityService from '../services/activity-service';
+import { toast } from 'react-toastify';
 
 const Activity = ({ activity }) => {
+  let params = {};
+  const { userDetails } = useContext(UserContext);
+  const [isOwner, setIsOwner] = useState(false);
   const {
     id,
     active,
+    owner,
     category,
     createdAt,
     startsAt,
@@ -19,6 +26,26 @@ const Activity = ({ activity }) => {
     mediaLocation,
     title,
   } = activity;
+
+  useEffect(() => {
+    params.userId = userDetails?.id;
+    params.activityId = id;
+  }, [userDetails]);
+
+  useEffect(() => {
+    setIsOwner(userDetails?.id === owner?.id);
+  }, [userDetails]);
+
+  const handleRequest = () => {
+    activityService
+      .joinActivity(params)
+      .then(() =>
+        toast.info('Your request to join the activity is pending approval.')
+      )
+      .catch((error) => {
+        toast.error(error.response.data.message);
+      });
+  };
   return (
     <Wrapper>
       <header>
@@ -44,13 +71,23 @@ const Activity = ({ activity }) => {
         </div>
         <footer>
           <div className='actions'>
-            <Link to='/add-job' className='btn clear-btn btn-block'>
-              Join
-            </Link>
+            {isOwner ? (
+              <Link
+                className='btn clear-btn btn-block btn-disabled'
+                onClick={(e) => e.preventDefault()}
+              >
+                Join
+              </Link>
+            ) : (
+              <Link className='btn clear-btn btn-block' onClick={handleRequest}>
+                Join
+              </Link>
+            )}
+
             <Link
               to='/activity-details'
               className='btn btn-block btn-more'
-              state={{ activityDetails: activity }}
+              state={{ activityDetails: activity, isOwner: isOwner }}
             >
               more
             </Link>
@@ -156,6 +193,13 @@ const Wrapper = styled.article`
     height: 35px;
     color: var(--white);
     text-align: center;
+  }
+  .btn-disabled {
+    cursor: default;
+    background: var(--grey-100);
+    color: var(--grey-300);
+    border: 1px solid var(--grey-100);
+    box-shadow: none;
   }
   .btn-container {
     display: flex;

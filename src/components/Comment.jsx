@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { FaPencilAlt, FaRegTrashAlt, FaCheck } from 'react-icons/fa';
 import { MdCancel } from 'react-icons/md';
 import moment from 'moment';
 import activityCommentService from '../services/activity-comment-service';
 import { toast } from 'react-toastify';
-import FormRow from './FormRow';
+import { UserContext } from '../contexts/user';
 
 const Comment = ({
   commentsArray,
@@ -16,6 +16,8 @@ const Comment = ({
 }) => {
   const { comment, createdAt, updatedAt, id } = commentInfo;
   const { givenName } = userInfo || '';
+  const { userDetails } = useContext(UserContext);
+  const [isOwner, setIsOwner] = useState(false);
   const [commentText, setCommentText] = useState({ [`comment${id}`]: comment });
   const [isEdit, setIsEdit] = useState(false);
   const formattedCreatedAt = createdAt
@@ -40,6 +42,10 @@ const Comment = ({
   const handleCancelEdit = () => {
     setIsEdit(false);
   };
+
+  useEffect(() => {
+    setIsOwner(userInfo?.id === userDetails?.id);
+  }, [userDetails]);
 
   const handleSubmitEdit = () => {
     let params = {};
@@ -66,6 +72,8 @@ const Comment = ({
         toast.error('Error deleting comment');
       });
   };
+
+  useEffect(() => {});
   return (
     <Wrapper className='comment-container'>
       {isEdit ? (
@@ -90,7 +98,7 @@ const Comment = ({
           </span>
         </div>
         <div className='btn-container'>
-          {isEdit ? (
+          {!isOwner ? null : isEdit ? (
             <>
               <button className='btn-action' onClick={handleSubmitEdit}>
                 <FaCheck />

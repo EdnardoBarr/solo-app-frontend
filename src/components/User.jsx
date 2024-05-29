@@ -1,12 +1,32 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import img from '../assets/images/profile1.svg';
-import { FaLocationArrow, FaCalendarAlt, FaBriefcase } from 'react-icons/fa';
+import { FaLocationArrow, FaRegSmileWink } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import ActivityInfo from './ActivityInfo';
+import friendshipService from '../services/friendship-service';
+import { UserContext } from '../contexts/user';
+import { toast } from 'react-toastify';
 
 const User = ({ user }) => {
+  const { userDetails } = useContext(UserContext);
   const { id, givenName, surname, country, city, interests, bio } = user;
+  let params = {};
+  const handleRequest = () => {
+    params.fromId = userDetails?.id;
+    params.toId = id;
+    console.log('params', params);
+    friendshipService
+      .requestFriend(params)
+      .then(() => toast.success('Friendship request sent succesfully'))
+      .catch((error) => console.log('erro', error.data));
+  };
+
+  useEffect(() => {
+    params.fromId = userDetails?.id;
+    params.toId = id;
+  }, [userDetails]);
+
   return (
     <Wrapper>
       <header>
@@ -26,19 +46,15 @@ const User = ({ user }) => {
             icon={<FaLocationArrow />}
             text={`${city}, ${country}` || ''}
           />
-          <ActivityInfo icon={<FaCalendarAlt />} text={interests || ''} />
+          <ActivityInfo
+            icon={<FaRegSmileWink />}
+            text={interests.join(', ').toLowerCase() || ''}
+          />
         </div>
         <footer>
           <div className='actions'>
-            <Link to='/add-job' className='btn clear-btn btn-block'>
-              Join
-            </Link>
-            <Link
-              to='/user-details'
-              className='btn btn-block btn-more'
-              //     state={{ userDetails: user }}
-            >
-              more
+            <Link className='btn clear-btn btn-block' onClick={handleRequest}>
+              connect
             </Link>
           </div>
         </footer>
@@ -124,13 +140,13 @@ const Wrapper = styled.article`
     grid-template-columns: 1fr;
     row-gap: 0.5rem;
     @media (min-width: 576px) {
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr;
     }
     @media (min-width: 992px) {
       grid-template-columns: 1fr;
     }
     @media (min-width: 1120px) {
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr;
     }
   }
   .actions {
