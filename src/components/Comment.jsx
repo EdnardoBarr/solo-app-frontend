@@ -45,7 +45,7 @@ const Comment = ({
 
   useEffect(() => {
     setIsOwner(userInfo?.id === userDetails?.id);
-  }, [userDetails]);
+  }, [userInfo]);
 
   const handleSubmitEdit = () => {
     let params = {};

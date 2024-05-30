@@ -36,7 +36,11 @@ class ActivityService {
   }
 
   joinActivity(params) {
-    return httpCommon.post(`activity/member/join`, params);
+    return httpCommon.post(`/activity/member/join`, params);
+  }
+
+  getStatus(params) {
+    return httpCommon.get('/activity/member/get-status', { params });
   }
 }
 

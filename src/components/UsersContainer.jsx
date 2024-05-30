@@ -21,7 +21,6 @@ const UsersContainer = ({ userFilter, setUserFilter }) => {
     userService
       .getAll(params)
       .then((res) => {
-        console.log('reees', res.data);
         setUsers(res?.data?.content);
         setTotalElements(res?.data?.totalElements);
         setTotalPages(res?.data?.totalPages);

@@ -2,16 +2,19 @@ import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import img from '../assets/images/volleyball.jpg';
 import ActivityInfo from './ActivityInfo';
-import { FaBriefcase, FaCalendarAlt, FaLocationArrow } from 'react-icons/fa';
+import {
+  FaBriefcase,
+  FaCalendarAlt,
+  FaLocationArrow,
+  FaListUl,
+} from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { UserContext } from '../contexts/user';
 import activityService from '../services/activity-service';
 import { toast } from 'react-toastify';
 
 const Activity = ({ activity }) => {
-  let params = {};
   const { userDetails } = useContext(UserContext);
-  const [isOwner, setIsOwner] = useState(false);
   const {
     id,
     active,
@@ -26,23 +29,48 @@ const Activity = ({ activity }) => {
     mediaLocation,
     title,
   } = activity;
-
-  useEffect(() => {
-    params.userId = userDetails?.id;
-    params.activityId = id;
-  }, [userDetails]);
+  const [isOwner, setIsOwner] = useState(false);
+  const [status, setStatus] = useState('');
+  const [updateStatus, setUpdateStatus] = useState(false);
 
   useEffect(() => {
     setIsOwner(userDetails?.id === owner?.id);
-  }, [userDetails]);
+  }, [userDetails, owner]);
+
+  useEffect(() => {
+    const params = {
+      userId: userDetails?.id,
+      activityId: id,
+    };
+
+    activityService
+      .getStatus(params)
+      .then((res) => {
+        setStatus(isOwner ? 'owner' : res?.data.toLowerCase().slice(7));
+      })
+      .catch((error) => console.log(error.response));
+  }, [activity, isOwner, updateStatus]);
+
+  const disableButton = () => {
+    const lowerCaseStatus = status?.toLocaleLowerCase();
+    return lowerCaseStatus === 'owner' || lowerCaseStatus === 'pending';
+  };
 
   const handleRequest = () => {
+    const params = {
+      userId: userDetails?.id,
+      activityId: id,
+    };
+
     activityService
       .joinActivity(params)
-      .then(() =>
-        toast.info('Your request to join the activity is pending approval.')
-      )
+      .then(() => {
+        setUpdateStatus(!updateStatus);
+        toast.info('Your request to join the activity is pending approval.');
+      })
       .catch((error) => {
+        console.log('paramms', params);
+
         toast.error(error.response.data.message);
       });
   };
@@ -65,13 +93,14 @@ const Activity = ({ activity }) => {
           />
           <ActivityInfo icon={<FaCalendarAlt />} text={startsAt || ''} />
           <ActivityInfo
-            icon={<FaBriefcase />}
+            icon={<FaListUl />}
             text={category.toLowerCase() || ''}
           />
+          <div className={`status ${status}`}>{status}</div>
         </div>
         <footer>
           <div className='actions'>
-            {isOwner ? (
+            {disableButton() ? (
               <Link
                 className='btn clear-btn btn-block btn-disabled'
                 onClick={(e) => e.preventDefault()}
@@ -87,7 +116,10 @@ const Activity = ({ activity }) => {
             <Link
               to='/activity-details'
               className='btn btn-block btn-more'
-              state={{ activityDetails: activity, isOwner: isOwner }}
+              state={{
+                activityDetails: activity,
+                status: status,
+              }}
             >
               more
             </Link>
@@ -155,17 +187,29 @@ const Wrapper = styled.article`
       letter-spacing: var(--letterSpacing);
     }
   }
+  .owner {
+    background: #e0e8f9;
+    color: #647acb;
+  }
+  .available {
+    background: var(--primary-700);
+    color: var(--primary-100);
+  }
   .pending {
     background: #fcefc7;
     color: #e9b949;
   }
-  .interview {
-    background: #e0e8f9;
-    color: #647acb;
+  .accepted {
+    background: #3a8c57;
+    color: #c3f5d4;
   }
   .declined {
     color: #d66a6a;
     background: #ffeeee;
+  }
+  .removed {
+    color: var(--grey-400);
+    background: var(--grey-50);
   }
   .content {
     padding: 1rem 1.5rem;
@@ -195,7 +239,7 @@ const Wrapper = styled.article`
     text-align: center;
   }
   .btn-disabled {
-    cursor: default;
+    cursor: not-allowed;
     background: var(--grey-100);
     color: var(--grey-300);
     border: 1px solid var(--grey-100);

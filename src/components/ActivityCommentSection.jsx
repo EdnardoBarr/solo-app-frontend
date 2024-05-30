@@ -107,7 +107,6 @@ const ActivityCommentSection = () => {
       </footer>
       <div className='comment-container'>
         {comments.map((item, i) => {
-          console.log('item', item);
           const activityId = activityDetails?.id;
           const { user: userInfo, comment, createdAt, updatedAt, id } = item;
           const commentInfo = { comment, createdAt, updatedAt, id };
