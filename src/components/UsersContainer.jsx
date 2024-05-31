@@ -15,8 +15,6 @@ const UsersContainer = ({ userFilter, setUserFilter }) => {
   useEffect(() => {
     let params = { ...userFilter };
     params.page = page;
-    params.page;
-    console.log('params', params);
 
     userService
       .getAll(params)

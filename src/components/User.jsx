@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import img from '../assets/images/profile1.svg';
 import { FaLocationArrow, FaRegSmileWink } from 'react-icons/fa';
@@ -9,23 +9,54 @@ import { UserContext } from '../contexts/user';
 import { toast } from 'react-toastify';
 
 const User = ({ user }) => {
+  const [status, setStatus] = useState('');
+  const [updateStatus, setUpdateStatus] = useState(false);
+
   const { userDetails } = useContext(UserContext);
   const { id, givenName, surname, country, city, interests, bio } = user;
-  let params = {};
+
   const handleRequest = () => {
-    params.fromId = userDetails?.id;
-    params.toId = id;
+    const params = {
+      fromId: userDetails?.id,
+      toId: id,
+    };
     console.log('params', params);
     friendshipService
       .requestFriend(params)
-      .then(() => toast.success('Friendship request sent succesfully'))
+      .then(() => {
+        setUpdateStatus(!updateStatus);
+        toast.success('Friendship request sent succesfully');
+      })
       .catch((error) => console.log('erro', error.data));
   };
 
+  const isPending = () => {
+    const lowerCaseStatus = status.toLocaleLowerCase();
+    console.log('lower', lowerCaseStatus);
+    return lowerCaseStatus === 'pending';
+  };
+
   useEffect(() => {
-    params.fromId = userDetails?.id;
-    params.toId = id;
-  }, [userDetails]);
+    const params = {
+      fromId: userDetails?.id,
+      toId: id,
+    };
+
+    friendshipService
+      .getStatus(params)
+      .then((res) => {
+        console.log(res.data);
+        setStatus(res.data.toLowerCase().slice(11));
+      })
+      .catch((error) => console.log('err', error.response));
+  }, [userDetails, user, updateStatus]);
+
+  // useEffect(() => {
+  //   const params = {
+  //     fromId: userDetails?.id,
+  //     toId: id,
+  //   };
+  // }, [userDetails, user]);
 
   return (
     <Wrapper>
@@ -53,9 +84,21 @@ const User = ({ user }) => {
         </div>
         <footer>
           <div className='actions'>
-            <Link className='btn clear-btn btn-block' onClick={handleRequest}>
-              connect
-            </Link>
+            {isPending() ? (
+              <Link
+                className={`btn clear-btn btn-block btn-disabled`}
+                onClick={(e) => e.preventDefault()}
+              >
+                pending
+              </Link>
+            ) : (
+              <Link
+                className={`btn clear-btn btn-block`}
+                onClick={handleRequest}
+              >
+                connect
+              </Link>
+            )}
           </div>
         </footer>
       </div>
@@ -119,6 +162,13 @@ const Wrapper = styled.article`
       color: var(--grey-400);
       letter-spacing: var(--letterSpacing);
     }
+  }
+  .btn-disabled {
+    cursor: not-allowed;
+    background: var(--grey-100);
+    color: var(--grey-300);
+    border: 1px solid var(--grey-100);
+    box-shadow: none;
   }
   .pending {
     background: #fcefc7;
