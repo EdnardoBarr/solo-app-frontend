@@ -1,6 +1,5 @@
 import { IoBarChartSharp } from 'react-icons/io5';
 import { MdQueryStats } from 'react-icons/md';
-import { LiaGlobeAmericasSolid } from 'react-icons/lia';
 import { ImProfile } from 'react-icons/im';
 import { FaPlusSquare, FaUserFriends } from 'react-icons/fa';
 

@@ -12,6 +12,7 @@ import { Link } from 'react-router-dom';
 import { UserContext } from '../contexts/user';
 import activityService from '../services/activity-service';
 import { toast } from 'react-toastify';
+import { useAuth } from '../contexts/auth';
 
 const Activity = ({ activity }) => {
   const { userDetails } = useContext(UserContext);
@@ -29,12 +30,15 @@ const Activity = ({ activity }) => {
     mediaLocation,
     title,
   } = activity;
+  const { isLoading, setIsLoading } = useAuth();
   const [isOwner, setIsOwner] = useState(false);
   const [status, setStatus] = useState('');
   const [updateStatus, setUpdateStatus] = useState(false);
 
   useEffect(() => {
-    setIsOwner(userDetails?.id === owner?.id);
+    if (userDetails) {
+      setIsOwner(userDetails?.id === owner?.id);
+    }
   }, [userDetails, owner]);
 
   useEffect(() => {
@@ -62,6 +66,8 @@ const Activity = ({ activity }) => {
       activityId: id,
     };
 
+    setIsLoading(true);
+
     activityService
       .joinActivity(params)
       .then(() => {
@@ -70,9 +76,10 @@ const Activity = ({ activity }) => {
       })
       .catch((error) => {
         console.log('paramms', params);
-
         toast.error(error.response.data.message);
       });
+
+    setIsLoading(false);
   };
   return (
     <Wrapper>

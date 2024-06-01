@@ -17,6 +17,7 @@ import FriendshipContainer from './FriendshipContainer';
 import SearchUserContainer from './SearchUserContainer';
 import UsersContainer from './UsersContainer';
 import User from './User';
+import StatItem from './StatItem';
 
 export {
   Logo,
@@ -25,7 +26,6 @@ export {
   SmallSidebar,
   Navbar,
   Avatar,
-  StatsContainer,
   ActivitiesContainer,
   Activity,
   ActivityInfo,
@@ -38,4 +38,6 @@ export {
   SearchUserContainer,
   UsersContainer,
   User,
+  StatsContainer,
+  StatItem,
 };

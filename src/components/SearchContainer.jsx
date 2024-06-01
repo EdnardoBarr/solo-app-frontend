@@ -2,18 +2,26 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import FormRow from './FormRow';
 import activityCategories from '../utils/activityCategories';
+import activityStatus from '../utils/activityStatus';
 
 const INITIAL_STATE = {
   title: '',
   category: '',
+  status: '',
   city: '',
   initialStartDate: '',
   endStartDate: '',
 };
 
-const SearchContainer = ({ activityFilter, setActivityFilter }) => {
+const SearchContainer = ({
+  activityFilter,
+  setActivityFilter,
+  page,
+  setPage,
+}) => {
   const clearForm = () => {
     setActivityFilter(INITIAL_STATE);
+    setPage(0);
   };
 
   const handleChange = (e) => {
@@ -24,6 +32,7 @@ const SearchContainer = ({ activityFilter, setActivityFilter }) => {
     console.log('value', value);
 
     setActivityFilter({ ...activityFilter, [name]: value });
+    setPage(0);
   };
 
   const handleSubmit = (e) => {
@@ -56,12 +65,30 @@ const SearchContainer = ({ activityFilter, setActivityFilter }) => {
               className='form-select'
               onChange={handleChange}
             >
-              <option defaultValue=''>Select a Category</option>
+              <option defaultValue=''>Select</option>
               {activityCategories.map((activityCategory) => {
                 const { id, category, value } = activityCategory;
                 return (
                   <option value={value} key={id}>
                     {category}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
+          <div className='form-row'>
+            <label className='form-label'>Status</label>
+            <select
+              name='status'
+              className='form-select'
+              onChange={handleChange}
+            >
+              <option defaultValue=''>Select</option>
+              {activityStatus.map((item) => {
+                const { id, status, value } = item;
+                return (
+                  <option value={value} key={id}>
+                    {status}
                   </option>
                 );
               })}
@@ -124,6 +151,9 @@ const Wrapper = styled.section`
     grid-template-columns: 1fr;
     column-gap: 2rem;
     row-gap: 0.5rem;
+  }
+  select {
+    cursor: pointer;
   }
   h5 {
     font-weight: 700;

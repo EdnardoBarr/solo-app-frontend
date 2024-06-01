@@ -1,10 +1,13 @@
 import { createContext, useContext, useEffect, useState, useMemo } from 'react';
 import httpCommon from '../http-common';
+import { Loading } from '../components/Loading';
 
 const tokenKey = 'token';
 const refreshTokenKey = 'refresh-token';
 const authHeader = 'Authorization';
 const authHeaderPrefix = 'Bearer';
+
+const DELAY = 500;
 
 const AuthContext = createContext();
 
@@ -27,6 +30,7 @@ const AuthProvider = ({ children }) => {
   const [refreshToken, setRefreshToken_] = useState(
     localStorage.getItem(refreshTokenKey)
   );
+  const [isLoading, setIsLoading] = useState(true);
 
   // Function to set the authentication token
   const setToken = (newToken) => {
@@ -47,11 +51,16 @@ const AuthProvider = ({ children }) => {
     }
     window.dispatchEvent(new Event('storage'));
     updateHeaders(token);
+    setIsLoading(false);
   }, [token]);
 
   useEffect(() => {
-    if (refreshToken) localStorage.setItem(refreshTokenKey, refreshToken);
-    else localStorage.removeItem(refreshTokenKey);
+    if (refreshToken) {
+      localStorage.setItem(refreshTokenKey, refreshToken);
+    } else {
+      localStorage.removeItem(refreshTokenKey);
+    }
+    setIsLoading(false);
   }, [refreshToken]);
 
   // Memoized value of the authentication context
@@ -62,12 +71,16 @@ const AuthProvider = ({ children }) => {
       setToken,
       refreshToken,
       setRefreshToken,
+      isLoading,
+      setIsLoading,
     }),
     [token, refreshToken]
   );
 
   return (
-    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={contextValue}>
+      {isLoading ? <Loading /> : children}
+    </AuthContext.Provider>
   );
 };
 

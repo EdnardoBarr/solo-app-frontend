@@ -1,7 +1,8 @@
 import React from 'react';
+import { StatsContainer } from '../../components';
 
 const Stats = () => {
-  return <h1>Stats</h1>;
+  return <StatsContainer />;
 };
 
 export default Stats;

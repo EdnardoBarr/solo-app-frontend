@@ -4,8 +4,10 @@ import PageBtnContainer from './PageBtnContainer';
 import User from './User';
 import userService from '../services/user-service';
 import { UserContext } from '../contexts/user';
+import { useAuth } from '../contexts/auth';
 
 const UsersContainer = ({ userFilter, setUserFilter }) => {
+  const { isLoading, setIsLoading } = useAuth();
   const { userDetails } = useContext(UserContext);
   const [users, setUsers] = useState([]);
   const [totalElements, setTotalElements] = useState(0);
@@ -13,6 +15,7 @@ const UsersContainer = ({ userFilter, setUserFilter }) => {
   const [page, setPage] = useState(0);
 
   useEffect(() => {
+    setIsLoading(true);
     let params = { ...userFilter };
     params.page = page;
 
@@ -25,6 +28,8 @@ const UsersContainer = ({ userFilter, setUserFilter }) => {
         console.log('getAll', res.data);
       })
       .catch((error) => console.log('error', error));
+
+    setIsLoading(false);
   }, [page, userFilter]);
 
   if (users?.content?.length === 0) {

@@ -69,6 +69,19 @@ const Wrapper = styled.aside`
     .nav-link:hover .icon {
       color: var(--primary-500);
     }
+    .nav-activities {
+      //  background: var(--grey-200);
+    }
+    .dropdown-link {
+      //  color: var(--primary-900);
+      padding-left: 3rem;
+    }
+    .dropdown-link-active {
+      color: var(--primary-900);
+    }
+    .dropdown-link:hover {
+      padding-left: 3.5rem;
+    }
     .icon {
       font-size: 1.5rem;
       margin-right: 1rem;
