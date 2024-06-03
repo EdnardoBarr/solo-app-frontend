@@ -18,6 +18,7 @@ import {
 import ProtectedRoute from './pages/ProtectedRoute';
 import { LoadingProvider } from './contexts/loading';
 import Friendship from './pages/Friendship';
+import Notifications from './pages/dashboard/Notifications';
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
                 <Route path='add-activity' element={<AddActivity />} />
                 <Route path='connect' element={<Connect />} />
                 <Route path='profile' element={<Profile />} />
+                <Route path='notifications' element={<Notifications />} />
                 <Route path='password/change' element={<ChangePassword />} />
                 <Route path='activity-details' element={<SingleActivity />} />
               </Route>

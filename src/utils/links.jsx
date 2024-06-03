@@ -1,5 +1,5 @@
 import { IoBarChartSharp } from 'react-icons/io5';
-import { MdQueryStats } from 'react-icons/md';
+import { MdQueryStats, MdNotificationAdd } from 'react-icons/md';
 import { ImProfile } from 'react-icons/im';
 import { FaPlusSquare, FaUserFriends } from 'react-icons/fa';
 
@@ -23,7 +23,13 @@ const links = [
     path: '/connect',
     icon: <FaUserFriends />,
   },
-  { id: 5, text: 'profile', path: '/profile', icon: <ImProfile /> },
+  {
+    id: 5,
+    text: 'notifications',
+    path: '/notifications',
+    icon: <MdNotificationAdd />,
+  },
+  { id: 6, text: 'profile', path: '/profile', icon: <ImProfile /> },
 ];
 
 export default links;
