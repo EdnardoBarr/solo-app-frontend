@@ -18,6 +18,9 @@ import SearchUserContainer from './SearchUserContainer';
 import UsersContainer from './UsersContainer';
 import User from './User';
 import StatItem from './StatItem';
+import ProfileNotificationContainer from './ProfileNotificationContainer';
+import Notification from './Notification';
+import AcceptedFriendshipContainer from './AcceptedFriendshipContainer';
 
 export {
   Logo,
@@ -40,4 +43,7 @@ export {
   User,
   StatsContainer,
   StatItem,
+  ProfileNotificationContainer,
+  Notification,
+  AcceptedFriendshipContainer,
 };

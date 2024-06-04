@@ -14,10 +14,10 @@ import {
   ChangePassword,
   SingleActivity,
   Connect,
+  Friendship,
 } from './pages/dashboard';
 import ProtectedRoute from './pages/ProtectedRoute';
 import { LoadingProvider } from './contexts/loading';
-import Friendship from './pages/Friendship';
 import Notifications from './pages/dashboard/Notifications';
 
 function App() {
@@ -43,6 +43,7 @@ function App() {
                 <Route path='notifications' element={<Notifications />} />
                 <Route path='password/change' element={<ChangePassword />} />
                 <Route path='activity-details' element={<SingleActivity />} />
+                <Route path='my-friendship' element={<Friendship />} />
               </Route>
               <Route path='/landing' element={<Landing />} />
               <Route path='/register' element={<Register />} />

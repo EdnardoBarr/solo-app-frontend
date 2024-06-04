@@ -7,7 +7,7 @@ import Profile from './Profile';
 import ChangePassword from './ChangePassword';
 import SingleActivity from './SingleActivity';
 import Connect from './Connect';
-
+import Friendship from './Friendship';
 export {
   AddActivity,
   AllActivities,
@@ -18,4 +18,5 @@ export {
   ChangePassword,
   SingleActivity,
   Connect,
+  Friendship,
 };

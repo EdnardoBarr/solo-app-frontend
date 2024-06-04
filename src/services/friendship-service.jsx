@@ -6,7 +6,7 @@ class FriendshipService {
   }
 
   update(params) {
-    return httpCommon.put('/friendship/request/update', params);
+    return httpCommon.put('/friendship/update', params);
   }
 
   getStatus(params) {
@@ -15,6 +15,10 @@ class FriendshipService {
 
   getPending(params, userId) {
     return httpCommon.get(`/friendship/get-pending/${userId}`, { params });
+  }
+
+  getAccepted(params, userId) {
+    return httpCommon.get(`/friendship/get-accepted/${userId}`, { params });
   }
 }
 

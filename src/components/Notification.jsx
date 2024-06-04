@@ -1,66 +1,62 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
-import img from '../assets/images/profile1.svg';
-import { FaLocationArrow, FaRegSmileWink } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
-import ActivityInfo from './ActivityInfo';
-import friendshipService from '../services/friendship-service';
 import { UserContext } from '../contexts/user';
+import { useAuth } from '../contexts/auth';
+import img from '../assets/images/profile1.svg';
+import ActivityInfo from './ActivityInfo';
+import { FaLocationArrow, FaRegSmileWink } from 'react-icons/fa';
+import friendshipService from '../services/friendship-service';
 import { toast } from 'react-toastify';
 
-const User = ({ user }) => {
-  const [status, setStatus] = useState('');
-  const [updateStatus, setUpdateStatus] = useState(false);
-
+const Notification = ({ user, reload, setReload }) => {
   const { userDetails } = useContext(UserContext);
   const { id, givenName, surname, country, city, interests, bio } = user;
+  const { isLoading, setIsLoading } = useAuth();
 
-  const handleRequest = () => {
+  const handleAccept = () => {
     const params = {
-      fromId: userDetails?.id,
-      toId: id,
+      fromId: id,
+      toId: userDetails?.id,
+      status: 'FRIENDSHIP_ACCEPTED',
     };
-    console.log('params', params);
+
+    setIsLoading(true);
+
     friendshipService
-      .requestFriend(params)
+      .update(params)
       .then(() => {
-        setUpdateStatus(!updateStatus);
-        toast.success('Friendship request sent succesfully');
+        setReload(!reload);
+        toast.success(`You are now friends with ${givenName}`);
       })
-      .catch((error) => console.log('erro', error.data));
+      .catch((err) =>
+        toast.error('An error occurred while processing the request')
+      );
+
+    setIsLoading(false);
   };
 
-  const isPending = () => {
-    const lowerCaseStatus = status.toLocaleLowerCase();
-    console.log('lower', lowerCaseStatus);
-    return lowerCaseStatus === 'pending';
-  };
-
-  useEffect(() => {
-    if (!userDetails) {
-      return;
-    }
+  const handleDecline = () => {
     const params = {
-      fromId: userDetails?.id,
-      toId: id,
+      fromId: id,
+      toId: userDetails?.id,
+      status: 'FRIENDSHIP_DECLINED',
     };
 
+    setIsLoading(true);
+
     friendshipService
-      .getStatus(params)
-      .then((res) => {
-        console.log(res.data);
-        setStatus(res.data.toLowerCase().slice(11));
+      .update(params)
+      .then(() => {
+        setReload(!reload);
+        toast.success(
+          `You have declined the invitation to be friends with ${givenName}`
+        );
       })
-      .catch((error) => console.log('err', error.response));
-  }, [userDetails, user, updateStatus]);
-
-  // useEffect(() => {
-  //   const params = {
-  //     fromId: userDetails?.id,
-  //     toId: id,
-  //   };
-  // }, [userDetails, user]);
-
+      .catch((err) =>
+        toast.error('An error occurred while processing the request')
+      );
+    setIsLoading(false);
+  };
   return (
     <Wrapper>
       <header>
@@ -87,21 +83,20 @@ const User = ({ user }) => {
         </div>
         <footer>
           <div className='actions'>
-            {isPending() ? (
-              <Link
-                className={`btn clear-btn btn-block btn-disabled`}
-                onClick={(e) => e.preventDefault()}
-              >
-                pending
-              </Link>
-            ) : (
-              <Link
-                className={`btn clear-btn btn-block`}
-                onClick={handleRequest}
-              >
-                connect
-              </Link>
-            )}
+            <button
+              type='button'
+              className={`btn btn-block`}
+              onClick={handleAccept}
+            >
+              accept
+            </button>
+            <button
+              type='button'
+              className={`btn clear-btn btn-block`}
+              onClick={handleDecline}
+            >
+              decline
+            </button>
           </div>
         </footer>
       </div>
@@ -109,7 +104,7 @@ const User = ({ user }) => {
   );
 };
 
-const Wrapper = styled.article`
+const Wrapper = styled.section`
   background: var(--white);
   border-radius: var(--borderRadius);
   display: grid;
@@ -240,4 +235,4 @@ const Wrapper = styled.article`
   }
 `;
 
-export default User;
+export default Notification;

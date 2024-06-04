@@ -5,7 +5,7 @@ import Logo from './Logo';
 import Avatar from './Avatar';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/auth';
 import loginService from '../services/login-service';
 import { toast } from 'react-toastify';
@@ -51,13 +51,24 @@ const Navbar = ({ isSidebarOpen, setIsSidebarOpen }) => {
             <FaCaretDown className='caret-down' size={32} />
           </button>
           <div className={showDropdown ? 'dropdown show-dropdown' : 'dropdown'}>
-            <button
-              type='button'
-              className='dropdown-btn'
-              onClick={() => handleLogout()}
-            >
-              logout
-            </button>
+            <div className='profile-btn'>
+              <Link
+                to='/profile'
+                className='dropdown-btn'
+                //  onClick={() => handleLogout()}
+              >
+                profile
+              </Link>
+            </div>
+            <div className='profile-btn'>
+              <button
+                type='button'
+                className='dropdown-btn '
+                onClick={() => handleLogout()}
+              >
+                logout
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -111,6 +122,15 @@ const Wrapper = styled.nav`
     position: relative;
     box-shadow: none;
   }
+  .profile-btn {
+    padding: 0.8rem 0;
+    width: 100%;
+  }
+  .profile-btn:hover {
+    cursor: pointer;
+    background: var(--grey-400);
+    transition: var(--transition);
+  }
   .btn:hover {
     box-shadow: var(--shadow-1);
     background: var(--grey-100);
@@ -134,7 +154,7 @@ const Wrapper = styled.nav`
     width: 100%;
     background: var(--grey-100);
     box-shadow: var(--shadow-2);
-    padding: 0.5rem;
+    // padding: 0.5rem 0;
     text-align: center;
     visibility: hidden;
     border-radius: var(--borderRadius);
