@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import img from '../assets/images/volleyball.jpg';
 import { ActivityInfo } from '.';
@@ -12,15 +12,13 @@ import {
 import { UserContext } from '../contexts/user';
 import activityService from '../services/activity-service';
 import { toast } from 'react-toastify';
+import qs from 'qs';
 
 const ActivityDetails = () => {
   const locationActivity = useLocation();
   const { userDetails } = useContext(UserContext);
   const [status, setStatus] = useState('');
-  const [isOwner, setIsOwner] = useState(false);
-
   const [updateStatus, setUpdateStatus] = useState(false);
-
   const { activityDetails } = locationActivity.state;
   const {
     id,
@@ -32,19 +30,28 @@ const ActivityDetails = () => {
     description,
     location,
     maxParticipants,
+    participantsJoined,
     mediaLocation,
     owner,
     title,
   } = activityDetails;
+  const activityId = id;
+
+  const queryParams = qs.stringify({
+    activityId,
+    participantsJoined,
+    maxParticipants,
+  });
 
   const disableButton = () => {
     const lowerCaseStatus = status?.toLocaleLowerCase();
-    return lowerCaseStatus === 'owner' || lowerCaseStatus === 'pending';
+    return lowerCaseStatus === 'pending';
   };
 
-  useEffect(() => {
-    setIsOwner(userDetails?.id === owner?.id);
-  }, [userDetails, owner]);
+  const isOwner = () => {
+    const lowerCaseStatus = status?.toLocaleLowerCase();
+    return lowerCaseStatus === 'owner';
+  };
 
   useEffect(() => {
     const params = {
@@ -52,13 +59,19 @@ const ActivityDetails = () => {
       activityId: id,
     };
 
-    activityService
-      .getStatus(params)
-      .then((res) => {
-        setStatus(isOwner ? 'owner' : res?.data.toLowerCase().slice(7));
-      })
-      .catch((error) => console.log(error.response));
-  }, [activityDetails, isOwner, updateStatus]);
+    if (userDetails && id) {
+      activityService
+        .getStatus(params)
+        .then((res) => {
+          setStatus(
+            userDetails.id === owner.id
+              ? 'owner'
+              : res?.data.toLowerCase().slice(7)
+          );
+        })
+        .catch((error) => console.log(error.response));
+    }
+  }, [id, userDetails, updateStatus]);
 
   const requestToJoin = () => {
     let params = {};
@@ -90,7 +103,22 @@ const ActivityDetails = () => {
         <div className={`status ${status}`}>{status}</div>
       </div>
       <footer className='btn-container'>
-        {disableButton() ? (
+        {isOwner() ? (
+          <Link
+            to={{
+              pathname: 'activity/get-pending',
+              search: `${queryParams}`,
+            }}
+            className='btn btn-block'
+            // state={{
+            //   activityId: id,
+            //   participantsJoined: participantsJoined,
+            //   maxParticipants: maxParticipants,
+            // }}
+          >
+            participants
+          </Link>
+        ) : disableButton() ? (
           <button
             type='button'
             className='btn btn-block btn-disabled'

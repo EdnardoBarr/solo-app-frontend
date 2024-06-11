@@ -1,43 +1,67 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { UserContext } from '../contexts/user';
+import { useAuth } from '../contexts/auth';
+import PageBtnContainer from './PageBtnContainer';
+import friendshipService from '../services/friendship-service';
+import Notification from './Notification';
+import Friendship from './Friendship';
 
 const FriendshipContainer = ({ friendshipFilter }) => {
+  const { userDetails } = useContext(UserContext);
+  const { isLoading, setIsLoading } = useAuth();
   const [friendships, setFriendships] = useState([]);
   const [totalElements, setTotalElements] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
   const [page, setPage] = useState(0);
+  const [reload, setReload] = useState(false);
 
   useEffect(() => {
-    let params = { ...friendshipFilter };
-    params.page = page;
-    params.page;
-    console.log('params', params);
+    if (!userDetails) {
+      return;
+    }
+    const userId = userDetails.id;
+    let params = {};
+    params.page = 0;
 
-    activityService
-      .getAll(params)
+    friendshipService
+      .getAccepted(params, userId)
       .then((res) => {
-        console.log('reees', res.data);
-        setActivities(res?.data?.content);
-        setTotalElements(res?.data?.totalElements);
-        setTotalPages(res?.data?.totalPages);
-        console.log('getAll', res.data);
-      })
-      .catch((error) => console.log('error', error));
-  }, [page, activityFilter]);
+        setFriendships(res.data.content);
+        setTotalElements(res.data.totalElements);
+        setTotalPages(res.data.totalPages);
 
-  if (activities?.content?.length === 0) {
+        console.log('aaa', res.data);
+      })
+      .catch((err) => console.log(err.response));
+  }, [userDetails, page, reload]);
+
+  if (totalElements === 0) {
     return (
       <Wrapper>
-        <h2>No Actvities to display</h2>
+        <h2>No Friends to display</h2>
       </Wrapper>
     );
   }
 
   return (
     <Wrapper>
-      <div className='activities'>
-        {activities?.map((activity, i) => {
-          return <Activity key={i} activity={activity} />;
+      <h2>
+        {totalElements === 1
+          ? `You are friends with ${totalElements} people.`
+          : `You have no Friends yet. Connect to people.`}
+      </h2>
+      <div className='friendships'>
+        {friendships?.map((friendship) => {
+          const { id } = friendship;
+          return (
+            <Friendship
+              key={id}
+              friendship={friendship}
+              reload={reload}
+              setReload={setReload}
+            />
+          );
         })}
       </div>
       {totalPages > 1 && (
@@ -59,18 +83,17 @@ const Wrapper = styled.section`
   & > h5 {
     font-weight: 700;
   }
-  .activities {
+  .friendships {
     display: grid;
     grid-template-columns: 1fr;
     row-gap: 2rem;
   }
   @media (min-width: 992px) {
-    .activities {
+    .friendships {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 1rem;
     }
   }
 `;
-
 export default FriendshipContainer;

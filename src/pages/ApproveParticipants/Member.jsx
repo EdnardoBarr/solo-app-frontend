@@ -1,65 +1,49 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import img from '../assets/images/profile1.svg';
+import img from '../../assets/images/profile1.svg';
 import { FaLocationArrow, FaRegSmileWink } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
-import ActivityInfo from './ActivityInfo';
-import friendshipService from '../services/friendship-service';
-import { UserContext } from '../contexts/user';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import activityService from '../../services/activity-service';
+import { ActivityInfo } from '../../components';
+import { UserContext } from '../../contexts/user';
+import qs from 'qs';
 
-const User = ({ user }) => {
-  const [status, setStatus] = useState('');
-  const [updateStatus, setUpdateStatus] = useState(false);
-
+const Member = ({ user, maxParticipants, participantsJoined, activityId }) => {
   const { userDetails } = useContext(UserContext);
   const { id, givenName, surname, country, city, interests, bio } = user;
+  const navigate = useNavigate();
 
-  const handleRequest = () => {
-    const params = {
-      fromId: userDetails?.id,
-      toId: id,
-    };
-    console.log('params', params);
-    friendshipService
-      .requestFriend(params)
-      .then(() => {
-        setUpdateStatus(!updateStatus);
-        toast.success('Friendship request sent succesfully');
-      })
-      .catch((error) => console.log('erro', error.data));
-  };
-
-  const isPending = () => {
-    const lowerCaseStatus = status.toLocaleLowerCase();
-    console.log('lower', lowerCaseStatus);
-    return lowerCaseStatus === 'pending';
-  };
-
-  useEffect(() => {
-    if (!userDetails) {
+  const handleApprove = () => {
+    if (participantsJoined + 1 > maxParticipants) {
+      toast.info(
+        'The activity has already reached its maximum number of participants'
+      );
       return;
     }
     const params = {
-      fromId: userDetails?.id,
-      toId: id,
+      maxParticipants: maxParticipants,
+      participantsJoined: participantsJoined,
+      activityId: activityId,
+      ownerId: userDetails?.id,
     };
 
-    friendshipService
-      .getStatus(params)
-      .then((res) => {
-        console.log(res.data);
-        setStatus(res.data.toLowerCase().slice(11));
+    activityService
+      .addParticipant(id, params)
+      .then(() => {
+        toast.success(`${givenName} successfully joined the activity`);
+        const newParticipantsJoined = participantsJoined + 1;
+        navigate(
+          `?maxParticipants=${maxParticipants}&participantsJoined=${newParticipantsJoined}&activityId=${activityId}`
+        );
       })
-      .catch((error) => console.log('err', error.response));
-  }, [userDetails, id, updateStatus]);
-
-  // useEffect(() => {
-  //   const params = {
-  //     fromId: userDetails?.id,
-  //     toId: id,
-  //   };
-  // }, [userDetails, user]);
+      .catch((error) => {
+        toast.info(
+          error?.response?.data?.message ||
+            'An error occurred while processing the request'
+        );
+      });
+  };
 
   return (
     <Wrapper>
@@ -87,21 +71,12 @@ const User = ({ user }) => {
         </div>
         <footer>
           <div className='actions'>
-            {isPending() ? (
-              <Link
-                className={`btn clear-btn btn-block btn-disabled`}
-                onClick={(e) => e.preventDefault()}
-              >
-                pending
-              </Link>
-            ) : (
-              <Link
-                className={`btn clear-btn btn-block`}
-                onClick={handleRequest}
-              >
-                connect
-              </Link>
-            )}
+            <Link className={`btn btn-block`} onClick={handleApprove}>
+              approve
+            </Link>
+            <Link className={`btn clear-btn btn-block`} onClick={handleApprove}>
+              decline
+            </Link>
           </div>
         </footer>
       </div>
@@ -240,4 +215,4 @@ const Wrapper = styled.article`
   }
 `;
 
-export default User;
+export default Member;

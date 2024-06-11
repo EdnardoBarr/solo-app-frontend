@@ -15,22 +15,25 @@ const UsersContainer = ({ userFilter, setUserFilter }) => {
   const [page, setPage] = useState(0);
 
   useEffect(() => {
-    setIsLoading(true);
     let params = { ...userFilter };
     params.page = page;
 
-    userService
-      .getAll(params)
-      .then((res) => {
-        setUsers(res?.data?.content);
-        setTotalElements(res?.data?.totalElements);
-        setTotalPages(res?.data?.totalPages);
-        console.log('getAll', res.data);
-      })
-      .catch((error) => console.log('error', error));
+    if (userDetails) {
+      setIsLoading(true);
+      params.userId = userDetails.id;
+      userService
+        .getAll(params)
+        .then((res) => {
+          setUsers(res?.data.content);
+          setTotalElements(res.data.totalElements);
+          setTotalPages(res.data.totalPages);
+          console.log('getAll', res.data);
+        })
+        .catch((error) => console.log('error', error));
 
-    setIsLoading(false);
-  }, [page, userFilter]);
+      setIsLoading(false);
+    }
+  }, [page, userFilter, userDetails]);
 
   if (users?.content?.length === 0) {
     return (
@@ -43,10 +46,9 @@ const UsersContainer = ({ userFilter, setUserFilter }) => {
   return (
     <Wrapper>
       <div className='users'>
-        {users?.map((user, i) => {
-          const { id: userId } = user;
-          const { id } = userDetails;
-          return userId !== id && <User key={i} user={user} />;
+        {users.map((user, i) => {
+          const { id } = user;
+          return <User key={id} user={user} />;
         })}
       </div>
       {totalPages > 1 && (

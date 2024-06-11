@@ -11,7 +11,6 @@ import { toast } from 'react-toastify';
 const Notification = ({ user, reload, setReload }) => {
   const { userDetails } = useContext(UserContext);
   const { id, givenName, surname, country, city, interests, bio } = user;
-  const { isLoading, setIsLoading } = useAuth();
 
   const handleAccept = () => {
     const params = {
@@ -19,8 +18,6 @@ const Notification = ({ user, reload, setReload }) => {
       toId: userDetails?.id,
       status: 'FRIENDSHIP_ACCEPTED',
     };
-
-    setIsLoading(true);
 
     friendshipService
       .update(params)
@@ -31,8 +28,6 @@ const Notification = ({ user, reload, setReload }) => {
       .catch((err) =>
         toast.error('An error occurred while processing the request')
       );
-
-    setIsLoading(false);
   };
 
   const handleDecline = () => {

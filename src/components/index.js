@@ -21,6 +21,7 @@ import StatItem from './StatItem';
 import ProfileNotificationContainer from './ProfileNotificationContainer';
 import Notification from './Notification';
 import AcceptedFriendshipContainer from './AcceptedFriendshipContainer';
+import Friendship from './Friendship';
 
 export {
   Logo,
@@ -46,4 +47,5 @@ export {
   ProfileNotificationContainer,
   Notification,
   AcceptedFriendshipContainer,
+  Friendship,
 };

@@ -29,7 +29,7 @@ const links = [
     path: '/notifications',
     icon: <MdNotificationAdd />,
   },
-  { id: 6, text: 'friendship', path: '/my-friendship', icon: <ImProfile /> },
+  // { id: 6, text: 'friendship', path: '/my-friendship', icon: <ImProfile /> },
 ];
 
 export default links;

@@ -36,24 +36,24 @@ const Activity = ({ activity }) => {
   const [updateStatus, setUpdateStatus] = useState(false);
 
   useEffect(() => {
-    if (userDetails) {
-      setIsOwner(userDetails?.id === owner?.id);
-    }
-  }, [userDetails, owner]);
-
-  useEffect(() => {
     const params = {
       userId: userDetails?.id,
       activityId: id,
     };
 
-    activityService
-      .getStatus(params)
-      .then((res) => {
-        setStatus(isOwner ? 'owner' : res?.data.toLowerCase().slice(7));
-      })
-      .catch((error) => console.log(error.response));
-  }, [activity, isOwner, updateStatus]);
+    if (userDetails && id) {
+      activityService
+        .getStatus(params)
+        .then((res) => {
+          setStatus(
+            userDetails.id === owner.id
+              ? 'owner'
+              : res?.data.toLowerCase().slice(7)
+          );
+        })
+        .catch((error) => console.log(error.response));
+    }
+  }, [id, userDetails, updateStatus]);
 
   const disableButton = () => {
     const lowerCaseStatus = status?.toLocaleLowerCase();

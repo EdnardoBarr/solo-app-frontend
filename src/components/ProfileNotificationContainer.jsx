@@ -27,8 +27,8 @@ const ProfileNotificationContainer = () => {
       .getPending(params, userId)
       .then((res) => {
         setNotifications(res.data.content);
-        setTotalElements(res?.data?.totalElements);
-        setTotalPages(res?.data?.totalPages);
+        setTotalElements(res.data.totalElements);
+        setTotalPages(res.data.totalPages);
 
         console.log('aaa', res.data);
       })
@@ -51,10 +51,11 @@ const ProfileNotificationContainer = () => {
           : `${totalElements} people want to be your friend`}
       </h2>
       <div className='notifications'>
-        {notifications?.map((notification, i) => {
+        {notifications?.map((notification) => {
+          const { id } = notification;
           return (
             <Notification
-              key={i}
+              key={id}
               user={notification}
               reload={reload}
               setReload={setReload}

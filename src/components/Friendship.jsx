@@ -1,65 +1,35 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
-import img from '../assets/images/profile1.svg';
-import { FaLocationArrow, FaRegSmileWink } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
-import ActivityInfo from './ActivityInfo';
-import friendshipService from '../services/friendship-service';
 import { UserContext } from '../contexts/user';
+import { useAuth } from '../contexts/auth';
+import img from '../assets/images/profile1.svg';
+import ActivityInfo from './ActivityInfo';
+import { FaLocationArrow, FaRegSmileWink } from 'react-icons/fa';
+import friendshipService from '../services/friendship-service';
 import { toast } from 'react-toastify';
 
-const User = ({ user }) => {
-  const [status, setStatus] = useState('');
-  const [updateStatus, setUpdateStatus] = useState(false);
-
+const Friendship = ({ friendship, reload, setReload }) => {
   const { userDetails } = useContext(UserContext);
-  const { id, givenName, surname, country, city, interests, bio } = user;
+  const { id, givenName, surname, country, city, interests, bio } = friendship;
 
-  const handleRequest = () => {
+  const handleRemove = () => {
     const params = {
-      fromId: userDetails?.id,
-      toId: id,
+      fromId: id,
+      toId: userDetails?.id,
+      status: 'FRIENDSHIP_REMOVED',
     };
-    console.log('params', params);
+
     friendshipService
-      .requestFriend(params)
+      .update(params)
       .then(() => {
-        setUpdateStatus(!updateStatus);
-        toast.success('Friendship request sent succesfully');
+        setReload(!reload);
+        toast.success(`You are no longer friends with ${givenName}`);
       })
-      .catch((error) => console.log('erro', error.data));
+      .catch((err) => {
+        console.log('erroooo', err);
+        toast.error('An error occurred while processing the request');
+      });
   };
-
-  const isPending = () => {
-    const lowerCaseStatus = status.toLocaleLowerCase();
-    console.log('lower', lowerCaseStatus);
-    return lowerCaseStatus === 'pending';
-  };
-
-  useEffect(() => {
-    if (!userDetails) {
-      return;
-    }
-    const params = {
-      fromId: userDetails?.id,
-      toId: id,
-    };
-
-    friendshipService
-      .getStatus(params)
-      .then((res) => {
-        console.log(res.data);
-        setStatus(res.data.toLowerCase().slice(11));
-      })
-      .catch((error) => console.log('err', error.response));
-  }, [userDetails, id, updateStatus]);
-
-  // useEffect(() => {
-  //   const params = {
-  //     fromId: userDetails?.id,
-  //     toId: id,
-  //   };
-  // }, [userDetails, user]);
 
   return (
     <Wrapper>
@@ -87,21 +57,13 @@ const User = ({ user }) => {
         </div>
         <footer>
           <div className='actions'>
-            {isPending() ? (
-              <Link
-                className={`btn clear-btn btn-block btn-disabled`}
-                onClick={(e) => e.preventDefault()}
-              >
-                pending
-              </Link>
-            ) : (
-              <Link
-                className={`btn clear-btn btn-block`}
-                onClick={handleRequest}
-              >
-                connect
-              </Link>
-            )}
+            <button
+              type='button'
+              className={`btn clear-btn btn-block`}
+              onClick={handleRemove}
+            >
+              remove
+            </button>
           </div>
         </footer>
       </div>
@@ -109,7 +71,7 @@ const User = ({ user }) => {
   );
 };
 
-const Wrapper = styled.article`
+const Wrapper = styled.section`
   background: var(--white);
   border-radius: var(--borderRadius);
   display: grid;
@@ -240,4 +202,4 @@ const Wrapper = styled.article`
   }
 `;
 
-export default User;
+export default Friendship;

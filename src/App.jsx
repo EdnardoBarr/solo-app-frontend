@@ -19,6 +19,8 @@ import {
 import ProtectedRoute from './pages/ProtectedRoute';
 import { LoadingProvider } from './contexts/loading';
 import Notifications from './pages/dashboard/Notifications';
+import { FriendshipContainer } from './components';
+import ApproveParticipants from './pages/ApproveParticipants';
 
 function App() {
   return (
@@ -43,7 +45,11 @@ function App() {
                 <Route path='notifications' element={<Notifications />} />
                 <Route path='password/change' element={<ChangePassword />} />
                 <Route path='activity-details' element={<SingleActivity />} />
-                <Route path='my-friendship' element={<Friendship />} />
+                <Route path='my-friendship' element={<FriendshipContainer />} />
+                <Route
+                  path='activity-details/activity/get-pending'
+                  element={<ApproveParticipants />}
+                />
               </Route>
               <Route path='/landing' element={<Landing />} />
               <Route path='/register' element={<Register />} />

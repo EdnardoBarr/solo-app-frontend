@@ -41,7 +41,6 @@ const Navbar = ({ isSidebarOpen, setIsSidebarOpen }) => {
           <h3 className='logo-text'>dashboard</h3>
         </div>
         <div className='btn-container'>
-          {/* <BsThreeDotsVertical className='separator' size={32} /> */}
           <button
             type='button'
             className='btn'
@@ -53,9 +52,18 @@ const Navbar = ({ isSidebarOpen, setIsSidebarOpen }) => {
           <div className={showDropdown ? 'dropdown show-dropdown' : 'dropdown'}>
             <div className='profile-btn'>
               <Link
+                to='/my-friendship'
+                className='dropdown-btn'
+                onClick={() => setShowDropdown(!showDropdown)}
+              >
+                friends
+              </Link>
+            </div>
+            <div className='profile-btn'>
+              <Link
                 to='/profile'
                 className='dropdown-btn'
-                //  onClick={() => handleLogout()}
+                onClick={() => setShowDropdown(!showDropdown)}
               >
                 profile
               </Link>
