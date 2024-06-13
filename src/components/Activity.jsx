@@ -3,10 +3,10 @@ import styled from 'styled-components';
 import img from '../assets/images/volleyball.jpg';
 import ActivityInfo from './ActivityInfo';
 import {
-  FaBriefcase,
   FaCalendarAlt,
   FaLocationArrow,
   FaListUl,
+  FaHandsHelping,
 } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { UserContext } from '../contexts/user';
@@ -27,6 +27,7 @@ const Activity = ({ activity }) => {
     description,
     location,
     maxParticipants,
+    participantsJoined,
     mediaLocation,
     title,
   } = activity;
@@ -57,10 +58,20 @@ const Activity = ({ activity }) => {
 
   const disableButton = () => {
     const lowerCaseStatus = status?.toLocaleLowerCase();
-    return lowerCaseStatus === 'owner' || lowerCaseStatus === 'pending';
+    return (
+      lowerCaseStatus === 'owner' ||
+      lowerCaseStatus === 'pending' ||
+      lowerCaseStatus === 'accepted'
+    );
   };
 
   const handleRequest = () => {
+    if (maxParticipants === participantsJoined) {
+      toast.info(
+        'The activity has already reached its maximum number of participants'
+      );
+      return;
+    }
     const params = {
       userId: userDetails?.id,
       activityId: id,
@@ -75,7 +86,7 @@ const Activity = ({ activity }) => {
         toast.info('Your request to join the activity is pending approval.');
       })
       .catch((error) => {
-        console.log('paramms', params);
+        console.log(error);
         toast.error(error.response.data.message);
       });
 
@@ -102,6 +113,10 @@ const Activity = ({ activity }) => {
           <ActivityInfo
             icon={<FaListUl />}
             text={category.toLowerCase() || ''}
+          />
+          <ActivityInfo
+            icon={<FaHandsHelping />}
+            text={`participants: ${participantsJoined} / ${maxParticipants}`}
           />
           <div className={`status ${status}`}>{status}</div>
         </div>

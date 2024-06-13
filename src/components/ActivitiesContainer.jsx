@@ -6,31 +6,6 @@ import PageBtnContainer from './PageBtnContainer';
 import { useAuth } from '../contexts/auth';
 
 const ActivitiesContainer = ({ activities, totalPages, page, setPage }) => {
-  // const { isLoading, setIsLoading } = useAuth();
-  // const [activities, setActivities] = useState([]);
-  // const [totalElements, setTotalElements] = useState(0);
-  // const [totalPages, setTotalPages] = useState(1);
-  // const [page, setPage] = useState(0);
-
-  // useEffect(() => {
-  //   let params = { ...activityFilter };
-  //   params.page = page;
-  //   params.page;
-
-  //   setIsLoading(true);
-  //   activityService
-  //     .getAll(params)
-  //     .then((res) => {
-  //       setActivities(res?.data?.content);
-  //       setTotalElements(res?.data?.totalElements);
-  //       setTotalPages(res?.data?.totalPages);
-  //       console.log('getAll', res.data);
-  //     })
-  //     .catch((error) => console.log('error', error));
-
-  //   setIsLoading(false);
-  // }, [page, activityFilter]);
-
   if (activities?.content?.length === 0) {
     return (
       <Wrapper>

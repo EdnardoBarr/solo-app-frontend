@@ -21,6 +21,7 @@ import { LoadingProvider } from './contexts/loading';
 import Notifications from './pages/dashboard/Notifications';
 import { FriendshipContainer } from './components';
 import ApproveParticipants from './pages/ApproveParticipants';
+import AcceptedParticipants from './pages/AcceptedParticipants';
 
 function App() {
   return (
@@ -49,6 +50,10 @@ function App() {
                 <Route
                   path='activity-details/activity/get-pending'
                   element={<ApproveParticipants />}
+                />
+                <Route
+                  path='activity-details/activity/participants/accepted'
+                  element={<AcceptedParticipants />}
                 />
               </Route>
               <Route path='/landing' element={<Landing />} />

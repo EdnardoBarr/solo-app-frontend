@@ -8,6 +8,8 @@ import {
   FaCalendarAlt,
   FaBriefcase,
   FaListUl,
+  FaHandshake,
+  FaHandsHelping,
 } from 'react-icons/fa';
 import { UserContext } from '../contexts/user';
 import activityService from '../services/activity-service';
@@ -43,9 +45,11 @@ const ActivityDetails = () => {
     maxParticipants,
   });
 
+  const queryAcceptedParams = qs.stringify({ activityId });
+
   const disableButton = () => {
     const lowerCaseStatus = status?.toLocaleLowerCase();
-    return lowerCaseStatus === 'pending';
+    return lowerCaseStatus === 'pending' || lowerCaseStatus === 'accepted';
   };
 
   const isOwner = () => {
@@ -100,6 +104,23 @@ const ActivityDetails = () => {
         />
         <ActivityInfo icon={<FaCalendarAlt />} text={startsAt || ''} />
         <ActivityInfo icon={<FaListUl />} text={category.toLowerCase() || ''} />
+        <ActivityInfo
+          icon={<FaHandsHelping />}
+          text={
+            <>
+              <Link
+                to={{
+                  pathname: 'activity/participants/accepted',
+                  search: `${queryAcceptedParams}`,
+                }}
+                className='participant-link'
+              >
+                participants
+              </Link>
+              : {participantsJoined} / {maxParticipants}
+            </>
+          }
+        />
         <div className={`status ${status}`}>{status}</div>
       </div>
       <footer className='btn-container'>
@@ -110,13 +131,8 @@ const ActivityDetails = () => {
               search: `${queryParams}`,
             }}
             className='btn btn-block'
-            // state={{
-            //   activityId: id,
-            //   participantsJoined: participantsJoined,
-            //   maxParticipants: maxParticipants,
-            // }}
           >
-            participants
+            requests
           </Link>
         ) : disableButton() ? (
           <button
@@ -164,6 +180,13 @@ const Wrapper = styled.section`
     text-align: justify;
     text-justify: inter-word;
   }
+  .participant-link {
+    font-weight: bolder;
+  }
+  .participant-link:hover {
+    box-shadow: var(--shadow-4);
+    text-decoration: underline;
+  }
   .status {
     border-radius: var(--borderRadius);
     text-transform: capitalize;
@@ -198,7 +221,10 @@ const Wrapper = styled.section`
     background: var(--grey-50);
   }
   .btn {
+    display: flex;
     width: 8rem;
+    justify-content: center;
+    align-items: center;
   }
   .btn-container {
     display: flex;

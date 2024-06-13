@@ -45,6 +45,32 @@ const Member = ({ user, maxParticipants, participantsJoined, activityId }) => {
       });
   };
 
+  const handleDecline = () => {
+    const params = {
+      maxParticipants: maxParticipants,
+      participantsJoined: participantsJoined,
+      activityId: activityId,
+      ownerId: userDetails?.id,
+    };
+
+    activityService
+      .declineParticipant(id, params)
+      .then(() => {
+        toast.success(
+          `${givenName}'s request to join the activity was declined`
+        );
+        navigate(
+          `?maxParticipants=${maxParticipants}&participantsJoined=${participantsJoined}&activityId=${activityId}`
+        );
+      })
+      .catch((error) => {
+        toast.info(
+          error?.response?.data?.message ||
+            'An error occurred while processing the request'
+        );
+      });
+  };
+
   return (
     <Wrapper>
       <header>
@@ -74,7 +100,7 @@ const Member = ({ user, maxParticipants, participantsJoined, activityId }) => {
             <Link className={`btn btn-block`} onClick={handleApprove}>
               approve
             </Link>
-            <Link className={`btn clear-btn btn-block`} onClick={handleApprove}>
+            <Link className={`btn clear-btn btn-block`} onClick={handleDecline}>
               decline
             </Link>
           </div>
