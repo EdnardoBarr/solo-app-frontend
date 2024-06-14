@@ -8,12 +8,26 @@ import { toast } from 'react-toastify';
 import activityService from '../../services/activity-service';
 import { UserContext } from '../../contexts/user';
 import qs from 'qs';
+import { Loading } from '../../components/Loading';
 
 const AcceptedUser = ({ user, activityId, reload, setReload }) => {
   const { userDetails } = useContext(UserContext);
   const { id, givenName, surname, country, city, interests, bio } = user;
+  const [activity, setActivity] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (activityId) {
+      setIsLoading(true);
+      activityService
+        .getById(activityId)
+        .then((res) => setActivity(res.data))
+        .catch();
+      setIsLoading(false);
+    }
+  }, [activityId]);
 
   const handleRemove = () => {
     const params = {
@@ -38,6 +52,10 @@ const AcceptedUser = ({ user, activityId, reload, setReload }) => {
       });
   };
 
+  if (isLoading) {
+    return <Loading />;
+  }
+
   return (
     <>
       <Wrapper>
@@ -47,9 +65,15 @@ const AcceptedUser = ({ user, activityId, reload, setReload }) => {
             {givenName} {surname}
           </h4>
         </div>
-        <button type='button' className='btn clear-btn' onClick={handleRemove}>
-          <IoMdClose size={30} className='close-icon' />
-        </button>
+        {activity?.owner.id === userDetails?.id && (
+          <button
+            type='button'
+            className='btn clear-btn'
+            onClick={handleRemove}
+          >
+            <IoMdClose size={30} className='close-icon' />
+          </button>
+        )}
       </Wrapper>
     </>
   );

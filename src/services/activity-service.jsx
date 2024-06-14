@@ -1,6 +1,10 @@
 import httpCommon from '../http-common';
 
 class ActivityService {
+  getById(id) {
+    return httpCommon.get(`/activity/${id}`);
+  }
+
   getAll(params) {
     return httpCommon.get(`/activity`, { params });
   }
