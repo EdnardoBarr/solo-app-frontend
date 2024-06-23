@@ -2,11 +2,11 @@ import httpCommon from '../http-common';
 
 class ActivityService {
   getById(id) {
-    return httpCommon.get(`/activity/${id}`);
+    return httpCommon.get(`/api/v1/activity/${id}`);
   }
 
   getAll(params) {
-    return httpCommon.get(`/activity`, { params });
+    return httpCommon.get(`/api/v1/activity`, { params });
   }
 
   create(
@@ -23,7 +23,7 @@ class ActivityService {
     active,
     ownerId
   ) {
-    return httpCommon.post('/activity/add', {
+    return httpCommon.post('/api/v1/activity/add', {
       title,
       description,
       address,
@@ -40,36 +40,42 @@ class ActivityService {
   }
 
   joinActivity(params) {
-    return httpCommon.post(`/activity/member/join`, params);
+    return httpCommon.post(`/api/v1/activity/member/join`, params);
   }
 
   addParticipant(userId, params) {
-    return httpCommon.put(`activity/add/participant/${userId}`, params);
+    return httpCommon.put(`/api/v1activity/add/participant/${userId}`, params);
   }
 
   declineParticipant(userId, params) {
-    return httpCommon.put(`activity/decline/participant/${userId}`, params);
+    return httpCommon.put(
+      `/api/v1activity/decline/participant/${userId}`,
+      params
+    );
   }
 
   removeParticipant(userId, params) {
-    return httpCommon.put(`activity/remove/participant/${userId}`, params);
+    return httpCommon.put(
+      `/api/v1activity/remove/participant/${userId}`,
+      params
+    );
   }
 
   dropParticipant(userId, params) {
-    return httpCommon.put(`activity/drop/participant/${userId}`, params);
+    return httpCommon.put(`/api/v1activity/drop/participant/${userId}`, params);
   }
 
   getStatus(params) {
-    return httpCommon.get('/activity/member/get-status', { params });
+    return httpCommon.get('/api/v1/activity/member/get-status', { params });
   }
 
   getUsersPending(activityId, params) {
-    return httpCommon.get(`/activity/member/get-pending/${activityId}`, {
+    return httpCommon.get(`/api/v1/activity/member/get-pending/${activityId}`, {
       params,
     });
   }
   getUsersAccept(activityId) {
-    return httpCommon.get(`/activity/member/get-accepted/${activityId}`);
+    return httpCommon.get(`/api/v1/activity/member/get-accepted/${activityId}`);
   }
 }
 

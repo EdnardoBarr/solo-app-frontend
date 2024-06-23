@@ -2,11 +2,11 @@ import httpCommon from '../http-common';
 
 class LoginService {
   doLogin(email, password) {
-    return httpCommon.post('/user/login', { email, password });
+    return httpCommon.post('/api/v1/user/login', { email, password });
   }
 
   doLogout() {
-    return httpCommon.post('/user/logout');
+    return httpCommon.post('/api/v1/user/logout');
   }
 
   // verifyTokenExpiration() {

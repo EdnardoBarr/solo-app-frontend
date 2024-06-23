@@ -2,7 +2,7 @@ import httpCommon from '../http-common';
 
 class UserService {
   getLoggedUserEmail() {
-    return httpCommon.get('/user/logged');
+    return httpCommon.get('/api/v1/user/logged');
   }
 
   // getUserByEmail(email) {
@@ -10,19 +10,19 @@ class UserService {
   // }
 
   getUserById(id) {
-    return httpCommon.get(`/user/${id}`);
+    return httpCommon.get(`/api/v1/user/${id}`);
   }
 
   getAll(params) {
-    return httpCommon.get(`/user/all`, { params });
+    return httpCommon.get(`/api/v1/user/all`, { params });
   }
 
   doLogin(email, password) {
-    return httpCommon.post('/user/login', { email, password });
+    return httpCommon.post('/api/v1/user/login', { email, password });
   }
 
   save(givenName, surname, email, password, matchingPassword, country, city) {
-    return httpCommon.post('/user/register', {
+    return httpCommon.post('/api/v1/user/register', {
       givenName,
       surname,
       email,
@@ -44,7 +44,7 @@ class UserService {
     dateOfBirth,
     bio
   ) {
-    return httpCommon.put(`/user/update/${id}`, {
+    return httpCommon.put(`/api/v1/user/update/${id}`, {
       givenName,
       surname,
       email,
