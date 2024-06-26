@@ -1,27 +1,31 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { UserContext, UserDispatchContext } from '../contexts/user';
 import { useNavigate } from 'react-router-dom';
 import userService from '../services/user-service';
 import { useAuth } from '../contexts/auth';
+import { toast } from 'react-toastify';
+import { Loading } from '../components/Loading';
 const ProtectedRoute = ({ children }) => {
   const { setUserDetails } = useContext(UserDispatchContext) || {};
   const { token, setToken, tokenKey } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
   const { authenticated } = useContext(UserContext);
   const navigate = useNavigate();
 
   useEffect(() => {
     if (!authenticated) {
-      console.log('aaa');
+      setIsLoading(true);
       userService
         .getLoggedUserEmail()
         .then((res) => setUserDetails(res.data))
         .catch((error) => {
-          // if (error.response?.status === 401) {
-          //   setUserDetails(null);
-          //   if (token) setToken(null);
-          // }
-          // navigate('/landing');
-        });
+          if (error.response?.status === 401) {
+            setUserDetails(null);
+            if (token) setToken(null);
+          }
+          navigate('/landing');
+        })
+        .finally(() => setIsLoading(false));
     }
   }, [authenticated]);
 
@@ -34,15 +38,14 @@ const ProtectedRoute = ({ children }) => {
 
   useEffect(() => {
     window.addEventListener('storage', onStorageTokenChange);
+    return () => {
+      window.removeEventListener('storage', onStorageTokenChange);
+    };
   }, []);
 
-  // useEffect(() => {
-
-  // })
-
-  // if (!authenticated) {
-  //   return navigate('/landing');
-  //  }
+  if (isLoading) {
+    return <Loading />;
+  }
   return children;
 };
 

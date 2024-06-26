@@ -6,9 +6,7 @@ import { ActivityInfo } from '.';
 import {
   FaLocationArrow,
   FaCalendarAlt,
-  FaBriefcase,
   FaListUl,
-  FaHandshake,
   FaHandsHelping,
 } from 'react-icons/fa';
 import { UserContext } from '../contexts/user';
