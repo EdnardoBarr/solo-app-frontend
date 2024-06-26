@@ -122,7 +122,7 @@ const Activity = ({ activity }) => {
         </div>
         <footer>
           <div className='actions'>
-            {disableButton() ? (
+            {/* {disableButton() ? (
               <Link
                 className='btn clear-btn btn-block btn-disabled'
                 onClick={(e) => e.preventDefault()}
@@ -133,7 +133,7 @@ const Activity = ({ activity }) => {
               <Link className='btn clear-btn btn-block' onClick={handleRequest}>
                 Join
               </Link>
-            )}
+            )} */}
 
             <Link
               to='/activity-details'

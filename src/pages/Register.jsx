@@ -10,6 +10,9 @@ import localStorageService from '../services/localStorage-service';
 import Select from 'react-select';
 import userInterests from '../utils/userInterests';
 
+const EMAIL_DEMO = 'ednardobl@gmail.com';
+const PASSWORD_DEMO = '123';
+
 const initialState = {
   email: '',
   password: '',
@@ -33,6 +36,22 @@ const Register = () => {
     const value = e.target.value;
 
     setValues({ ...values, [name]: value });
+  };
+
+  const handleDemoLogin = () => {
+    userService
+      .doLogin(EMAIL_DEMO, PASSWORD_DEMO)
+      .then((res) => {
+        console.log('res', res);
+        const { token, refreshToken } = res.data;
+        setToken(token);
+        setRefreshToken(refreshToken);
+        navigate('/', { replace: true });
+        toast.success(`Good to see you again!`);
+      })
+      .catch((error) => {
+        toast.error('Invalid login');
+      });
   };
 
   const onSubmit = (e) => {
@@ -185,6 +204,13 @@ const Register = () => {
           <button type='submit' className='btn btn-block'>
             submit
           </button>
+          <button
+            type='button'
+            className='btn btn-block clear-btn'
+            onClick={handleDemoLogin}
+          >
+            demo user
+          </button>
         </div>
         <div className='container-row'>
           <p>
@@ -209,8 +235,13 @@ const Wrapper = styled.section`
   }
   .container-row {
     display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
     gap: 10px;
+  }
+  .btn-demo {
+    background: var(--orange-900);
   }
   .form {
     max-width: 700px;

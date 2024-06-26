@@ -24,6 +24,10 @@ class FriendshipService {
       params,
     });
   }
+
+  countFriendships(userId) {
+    return httpCommon.get(`api/v1/friendship/count/friendship/${userId}`);
+  }
 }
 
 export default new FriendshipService();

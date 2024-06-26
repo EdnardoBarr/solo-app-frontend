@@ -74,8 +74,17 @@ class ActivityService {
       params,
     });
   }
+
   getUsersAccept(activityId) {
     return httpCommon.get(`/api/v1/activity/member/get-accepted/${activityId}`);
+  }
+
+  countPending(userId) {
+    return httpCommon.get(`api/v1/activity/member/count/pending/${userId}`);
+  }
+
+  countAccepted(userId) {
+    return httpCommon.get(`api/v1/activity/member/count/accepted/${userId}`);
   }
 }
 
