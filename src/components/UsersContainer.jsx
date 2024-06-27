@@ -78,8 +78,8 @@ const Wrapper = styled.section`
   @media (min-width: 992px) {
     .users {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 2rem;
     }
   }
 `;

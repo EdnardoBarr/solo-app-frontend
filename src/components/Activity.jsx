@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import img from '../assets/images/volleyball.jpg';
+//import img from '../assets/images/volleyball.jpg';
 import ActivityInfo from './ActivityInfo';
 import {
   FaCalendarAlt,
@@ -35,6 +35,7 @@ const Activity = ({ activity }) => {
   const [isOwner, setIsOwner] = useState(false);
   const [status, setStatus] = useState('');
   const [updateStatus, setUpdateStatus] = useState(false);
+  const [img, setImg] = useState('');
 
   useEffect(() => {
     const params = {
@@ -55,6 +56,35 @@ const Activity = ({ activity }) => {
         .catch((error) => console.log(error.response));
     }
   }, [id, userDetails, updateStatus]);
+
+  useEffect(() => {
+    if (!category) {
+      return;
+    }
+    switch (category.toUpperCase()) {
+      case 'SPORT':
+        setImg('src/assets/images/sport.jpg');
+        break;
+      case 'TRAVEL':
+        setImg('src/assets/images/travel.jpg');
+        break;
+      case 'GYM':
+        setImg('src/assets/images/gym.jpg');
+        break;
+      case 'BEACH':
+        setImg('src/assets/images/beach.jpg');
+        break;
+      case 'OTHER':
+        setImg('src/assets/images/other.jpg');
+        break;
+      case 'TREKKING':
+        setImg('src/assets/images/trekking.jpg');
+        break;
+      default:
+        setImg('../assets/images/other.jpg');
+        break;
+    }
+  }, [category]);
 
   const disableButton = () => {
     const lowerCaseStatus = status?.toLocaleLowerCase();

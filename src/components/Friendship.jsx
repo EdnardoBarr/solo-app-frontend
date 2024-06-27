@@ -7,10 +7,12 @@ import ActivityInfo from './ActivityInfo';
 import { FaLocationArrow, FaRegSmileWink } from 'react-icons/fa';
 import friendshipService from '../services/friendship-service';
 import { toast } from 'react-toastify';
+import Avatar, { genConfig } from 'react-nice-avatar';
 
 const Friendship = ({ friendship, reload, setReload }) => {
   const { userDetails } = useContext(UserContext);
-  const { id, givenName, surname, country, city, interests, bio } = friendship;
+  const { id, email, givenName, surname, country, city, interests, bio } =
+    friendship;
 
   const handleRemove = () => {
     const params = {
@@ -31,11 +33,17 @@ const Friendship = ({ friendship, reload, setReload }) => {
       });
   };
 
+  const config = email ? genConfig(email) : {};
+
   return (
     <Wrapper>
       <header>
         <div className='img-container'>
-          <img src={img} alt='' />
+          <Avatar
+            style={{ width: '20rem', height: '15rem' }}
+            {...config}
+            shape='rounded'
+          />
         </div>
         <div className='info'>
           <h5>
@@ -95,7 +103,9 @@ const Wrapper = styled.section`
     border-radius: var(--borderRadius);
   }
   .img-container {
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1rem;
   }
   .main-icon {
     width: 60px;

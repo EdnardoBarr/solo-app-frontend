@@ -4,17 +4,18 @@ import styled from 'styled-components';
 import Logo from './Logo';
 import Avatar from './Avatar';
 import { BsThreeDotsVertical } from 'react-icons/bs';
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/auth';
 import loginService from '../services/login-service';
 import { toast } from 'react-toastify';
 import userService from '../services/user-service';
+import { UserContext } from '../contexts/user';
 
 const Navbar = ({ isSidebarOpen, setIsSidebarOpen }) => {
+  const { userDetails } = useContext(UserContext);
   const [showDropdown, setShowDropdown] = useState(false);
   const { setToken } = useAuth();
-
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -27,6 +28,7 @@ const Navbar = ({ isSidebarOpen, setIsSidebarOpen }) => {
         toast.error('Error logging out');
       });
   };
+
   return (
     <Wrapper>
       <div className='nav-center'>
@@ -38,17 +40,17 @@ const Navbar = ({ isSidebarOpen, setIsSidebarOpen }) => {
         </button>
         <div>
           <Logo />
-          <h3 className='logo-text'>dashboard</h3>
+          <h3 className='logo-text'>{userDetails?.givenName || ''}</h3>
         </div>
         <div className='btn-container'>
-          <button
+          <a
             type='button'
             className='btn'
             onClick={() => setShowDropdown(!showDropdown)}
           >
             <Avatar />
             <FaCaretDown className='caret-down' size={32} />
-          </button>
+          </a>
           <div className={showDropdown ? 'dropdown show-dropdown' : 'dropdown'}>
             <div className='profile-btn'>
               <Link
@@ -86,6 +88,7 @@ const Navbar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 
 const Wrapper = styled.nav`
   height: var(--nav-height);
+  z-index: 999;
   display: flex;
   align-items: center;
   justify-content: center;

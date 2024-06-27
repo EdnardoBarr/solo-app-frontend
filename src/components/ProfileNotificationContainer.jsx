@@ -5,6 +5,7 @@ import { useAuth } from '../contexts/auth';
 import PageBtnContainer from './PageBtnContainer';
 import friendshipService from '../services/friendship-service';
 import Notification from './Notification';
+import Avatar, { genConfig } from 'react-nice-avatar';
 
 const ProfileNotificationContainer = () => {
   const { userDetails } = useContext(UserContext);
@@ -75,7 +76,6 @@ const ProfileNotificationContainer = () => {
 };
 
 const Wrapper = styled.section`
-  margin-top: 4rem;
   h2 {
     text-transform: none;
   }

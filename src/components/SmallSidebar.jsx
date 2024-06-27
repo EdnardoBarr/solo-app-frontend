@@ -11,7 +11,9 @@ const SmallSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
     <Wrapper>
       <div
         className={
-          isSidebarOpen ? 'sidebar-container show-sidebar' : 'sidebar-container'
+          !isSidebarOpen
+            ? 'sidebar-container show-sidebar'
+            : 'sidebar-container'
         }
       >
         <div className='content'>

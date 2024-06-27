@@ -7,13 +7,13 @@ import ActivityInfo from './ActivityInfo';
 import friendshipService from '../services/friendship-service';
 import { UserContext } from '../contexts/user';
 import { toast } from 'react-toastify';
+import Avatar, { genConfig } from 'react-nice-avatar';
 
 const User = ({ user }) => {
   const [status, setStatus] = useState('');
   const [updateStatus, setUpdateStatus] = useState(false);
-
   const { userDetails } = useContext(UserContext);
-  const { id, givenName, surname, country, city, interests, bio } = user;
+  const { id, email, givenName, surname, country, city, interests, bio } = user;
 
   const handleRequest = () => {
     const params = {
@@ -54,19 +54,21 @@ const User = ({ user }) => {
       .catch((error) => console.log('err', error.response));
   }, [userDetails, id, updateStatus]);
 
-  // useEffect(() => {
-  //   const params = {
-  //     fromId: userDetails?.id,
-  //     toId: id,
-  //   };
-  // }, [userDetails, user]);
+  const config = email ? genConfig(email) : {};
 
   return (
     <Wrapper>
       <header>
+        {/* <div className='img-container'>*/}
         <div className='img-container'>
-          <img src={img} alt='' />
+          <Avatar
+            style={{ width: '20rem', height: '15rem' }}
+            {...config}
+            shape='rounded'
+          />
         </div>
+        {/* <img src={img} alt='' /> */}
+        {/* </div> */}
         <div className='info'>
           <h5>
             {givenName} {surname}
@@ -116,7 +118,6 @@ const Wrapper = styled.article`
   grid-template-rows: 1fr auto;
   box-shadow: var(--shadow-2);
   border-top: 4px solid var(--orange-900);
-  //max-width: 700px;
   header {
     padding: 1rem 1.5rem;
     border-bottom: 1px solid var(--grey-100);
@@ -132,8 +133,13 @@ const Wrapper = styled.article`
     height: auto;
     border-radius: var(--borderRadius);
   }
+  .img {
+  }
   .img-container {
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1rem;
+    z-index: 1; /* Ensure avatar stays above other content */
   }
   .main-icon {
     width: 60px;
@@ -173,20 +179,10 @@ const Wrapper = styled.article`
     border: 1px solid var(--grey-100);
     box-shadow: none;
   }
-  .pending {
-    background: #fcefc7;
-    color: #e9b949;
-  }
-  .interview {
-    background: #e0e8f9;
-    color: #647acb;
-  }
-  .declined {
-    color: #d66a6a;
-    background: #ffeeee;
-  }
   .content {
     padding: 1rem 1.5rem;
+    position: relative; /* Ensure content position is relative */
+    z-index: 0; /* Content should stay below avatar */
   }
   .content-center {
     display: grid;

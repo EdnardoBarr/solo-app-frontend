@@ -9,10 +9,11 @@ import activityService from '../../services/activity-service';
 import { UserContext } from '../../contexts/user';
 import qs from 'qs';
 import { Loading } from '../../components/Loading';
+import Avatar, { genConfig } from 'react-nice-avatar';
 
 const AcceptedUser = ({ user, activityId, reload, setReload }) => {
   const { userDetails } = useContext(UserContext);
-  const { id, givenName, surname, country, city, interests, bio } = user;
+  const { id, email, givenName, surname, country, city, interests, bio } = user;
   const [activity, setActivity] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -56,10 +57,16 @@ const AcceptedUser = ({ user, activityId, reload, setReload }) => {
     return <Loading />;
   }
 
+  const config = email ? genConfig(email) : {};
+
   return (
     <>
       <Wrapper>
-        <img src={img} alt='' />
+        <Avatar
+          style={{ width: '10rem', height: '10rem' }}
+          {...config}
+          shape='rounded'
+        />
         <div className='name-container'>
           <h4>
             {givenName} {surname}

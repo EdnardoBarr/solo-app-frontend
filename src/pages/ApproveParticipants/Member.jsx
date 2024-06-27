@@ -8,10 +8,11 @@ import activityService from '../../services/activity-service';
 import { ActivityInfo } from '../../components';
 import { UserContext } from '../../contexts/user';
 import qs from 'qs';
+import Avatar, { genConfig } from 'react-nice-avatar';
 
 const Member = ({ user, maxParticipants, participantsJoined, activityId }) => {
   const { userDetails } = useContext(UserContext);
-  const { id, givenName, surname, country, city, interests, bio } = user;
+  const { id, email, givenName, surname, country, city, interests, bio } = user;
   const navigate = useNavigate();
 
   const handleApprove = () => {
@@ -71,11 +72,17 @@ const Member = ({ user, maxParticipants, participantsJoined, activityId }) => {
       });
   };
 
+  const config = email ? genConfig(email) : {};
+
   return (
     <Wrapper>
       <header>
         <div className='img-container'>
-          <img src={img} alt='' />
+          <Avatar
+            style={{ width: '20rem', height: '15rem' }}
+            {...config}
+            shape='rounded'
+          />
         </div>
         <div className='info'>
           <h5>
@@ -134,7 +141,9 @@ const Wrapper = styled.article`
     border-radius: var(--borderRadius);
   }
   .img-container {
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1rem;
   }
   .main-icon {
     width: 60px;

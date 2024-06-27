@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-import img from '../assets/images/volleyball.jpg';
+//import img from '../assets/images/volleyball.jpg';
 import { ActivityInfo } from '.';
 import {
   FaLocationArrow,
@@ -19,6 +19,7 @@ const ActivityDetails = () => {
   const { userDetails } = useContext(UserContext);
   const [status, setStatus] = useState('');
   const [updateStatus, setUpdateStatus] = useState(false);
+  const [img, setImg] = useState('');
   const { activityDetails } = locationActivity.state;
   const {
     id,
@@ -74,6 +75,35 @@ const ActivityDetails = () => {
         .catch((error) => console.log(error.response));
     }
   }, [id, userDetails, updateStatus]);
+
+  useEffect(() => {
+    if (!category) {
+      return;
+    }
+    switch (category.toUpperCase()) {
+      case 'SPORT':
+        setImg('src/assets/images/sport.jpg');
+        break;
+      case 'TRAVEL':
+        setImg('src/assets/images/travel.jpg');
+        break;
+      case 'GYM':
+        setImg('src/assets/images/gym.jpg');
+        break;
+      case 'BEACH':
+        setImg('src/assets/images/beach.jpg');
+        break;
+      case 'OTHER':
+        setImg('src/assets/images/other.jpg');
+        break;
+      case 'TREKKING':
+        setImg('src/assets/images/trekking.jpg');
+        break;
+      default:
+        setImg('../assets/images/other.jpg');
+        break;
+    }
+  }, [category]);
 
   const requestToJoin = () => {
     let params = {};

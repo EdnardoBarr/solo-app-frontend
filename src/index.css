@@ -139,8 +139,9 @@ a {
   text-decoration: none;
   letter-spacing: var(--letterSpacing);
 }
-a:link, a:visited {
-    color: currentColor;
+a:link,
+a:visited {
+  color: currentColor;
 }
 a,
 button {
