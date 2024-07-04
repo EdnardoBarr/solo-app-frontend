@@ -1,7 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-//import img from '../assets/images/volleyball.jpg';
+import img1 from '../assets/images/sport.jpg';
+import img2 from '../assets/images/travel.jpg';
+import img3 from '../assets/images/gym.jpg';
+import img4 from '../assets/images/beach.jpg';
+import img5 from '../assets/images/other.jpg';
+import img6 from '../assets/images/trekking.jpg';
+import img7 from '../assets/images/other.jpg';
 import { ActivityInfo } from '.';
 import {
   FaLocationArrow,
@@ -82,25 +88,25 @@ const ActivityDetails = () => {
     }
     switch (category.toUpperCase()) {
       case 'SPORT':
-        setImg('./dist/assets/images/sport.jpg');
+        setImg(img1);
         break;
       case 'TRAVEL':
-        setImg('./dist/assets/images/travel.jpg');
+        setImg(img2);
         break;
       case 'GYM':
-        setImg('./dist/assets/images/gym.jpg');
+        setImg(img3);
         break;
       case 'BEACH':
-        setImg('./dist/assets/images/beach.jpg');
+        setImg(img4);
         break;
       case 'OTHER':
-        setImg('./dist/assets/images/other.jpg');
+        setImg(img5);
         break;
       case 'TREKKING':
-        setImg('./dist/assets/images/trekking.jpg');
+        setImg(img6);
         break;
       default:
-        setImg('./dist/assets/images/other.jpg');
+        setImg(img7);
         break;
     }
   }, [category]);
