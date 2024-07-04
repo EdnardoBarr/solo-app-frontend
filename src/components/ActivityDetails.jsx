@@ -82,25 +82,25 @@ const ActivityDetails = () => {
     }
     switch (category.toUpperCase()) {
       case 'SPORT':
-        setImg('/app/dist/src/assets/images/sport.jpg');
+        setImg('/dist/src/assets/images/sport.jpg');
         break;
       case 'TRAVEL':
-        setImg('/app/dist/src/assets/images/travel.jpg');
+        setImg('/dist/src/assets/images/travel.jpg');
         break;
       case 'GYM':
-        setImg('/app/dist/src/assets/images/gym.jpg');
+        setImg('/dist/src/assets/images/gym.jpg');
         break;
       case 'BEACH':
-        setImg('/app/dist/src/assets/images/beach.jpg');
+        setImg('/dist/src/assets/images/beach.jpg');
         break;
       case 'OTHER':
-        setImg('/app/dist/src/assets/images/other.jpg');
+        setImg('/dist/src/assets/images/other.jpg');
         break;
       case 'TREKKING':
-        setImg('/app/dist/src/assets/images/trekking.jpg');
+        setImg('/dist/src/assets/images/trekking.jpg');
         break;
       default:
-        setImg('/app/dist/src/assets/images/other.jpg');
+        setImg('/dist/src/assets/images/other.jpg');
         break;
     }
   }, [category]);
