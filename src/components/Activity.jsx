@@ -1,6 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
-//import img from '../assets/images/volleyball.jpg';
+import img1 from '../assets/images/sport.jpg';
+import img2 from '../assets/images/travel.jpg';
+import img3 from '../assets/images/gym.jpg';
+import img4 from '../assets/images/beach.jpg';
+import img5 from '../assets/images/other.jpg';
+import img6 from '../assets/images/trekking.jpg';
+import img7 from '../assets/images/other.jpg';
 import ActivityInfo from './ActivityInfo';
 import {
   FaCalendarAlt,
@@ -63,25 +69,25 @@ const Activity = ({ activity }) => {
     }
     switch (category.toUpperCase()) {
       case 'SPORT':
-        setImg('src/assets/images/sport.jpg');
+        setImg(img1);
         break;
       case 'TRAVEL':
-        setImg('src/assets/images/travel.jpg');
+        setImg(img2);
         break;
       case 'GYM':
-        setImg('src/assets/images/gym.jpg');
+        setImg(img3);
         break;
       case 'BEACH':
-        setImg('src/assets/images/beach.jpg');
+        setImg(img4);
         break;
       case 'OTHER':
-        setImg('src/assets/images/other.jpg');
+        setImg(img5);
         break;
       case 'TREKKING':
-        setImg('src/assets/images/trekking.jpg');
+        setImg(img6);
         break;
       default:
-        setImg('../assets/images/other.jpg');
+        setImg(img7);
         break;
     }
   }, [category]);
