@@ -30,8 +30,6 @@ const ProfileNotificationContainer = () => {
         setNotifications(res.data.content);
         setTotalElements(res.data.totalElements);
         setTotalPages(res.data.totalPages);
-
-        console.log('aaa', res.data);
       })
       .catch((err) => console.log(err.response));
   }, [userDetails, page, reload]);

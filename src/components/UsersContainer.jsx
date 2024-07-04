@@ -27,9 +27,8 @@ const UsersContainer = ({ userFilter, setUserFilter }) => {
           setUsers(res?.data.content);
           setTotalElements(res.data.totalElements);
           setTotalPages(res.data.totalPages);
-          console.log('getAll', res.data);
         })
-        .catch((error) => console.log('error', error));
+        .catch();
 
       setIsLoading(false);
     }
